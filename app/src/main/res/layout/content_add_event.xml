@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.julia.wirtec_iticket.AddEvent"
+    tools:showIn="@layout/activity_add_event">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:src="@drawable/ic_event"/>
+            <EditText
+                android:id="@+id/ad_name_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:textSize="15sp"
+                android:hint="Event Name"
+                android:text="" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:src="@drawable/ic_place_black_24dp"/>
+            <EditText
+                android:id="@+id/ad_place_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:textSize="15sp"
+                android:hint="Place"
+                android:text="" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:tint="@color/divider"
+                android:src="@drawable/overtime"/>
+            <EditText
+                android:id="@+id/ad_datetime_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:textSize="15sp"
+                android:hint="Date/Time"
+                android:text="" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:src="@drawable/ic_info_outline_black_24dp"/>
+            <EditText
+                android:id="@+id/ad_about_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:textSize="15sp"
+                android:hint="About"
+                android:text="" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:src="@drawable/ic_local_atm_black_24dp"/>
+
+            <EditText
+                android:id="@+id/ad_price_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:textSize="15sp"
+                android:hint="Ticket Price"
+                android:text="" />
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:src="@drawable/ic_ticketlimit"/>
+
+            <EditText
+                android:id="@+id/ad_numtickets_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:textSize="15sp"
+                android:hint="Ticket Limit"
+                android:text="" />
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:paddingLeft="25dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:id="@+id/oneicon"
+                android:src="@drawable/ic_group_black_24dp"/>
+
+            <TextView
+                android:id="@+id/ad_one_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:foregroundGravity="center_vertical"
+                android:layout_toRightOf="@+id/oneicon"
+                android:layout_marginLeft="25dp"
+                android:textSize="15sp"
+                android:text="1 Ticket/Person: " />
+
+            <CheckBox
+                android:id="@+id/yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ad_one_value"
+                android:layout_toRightOf="@+id/oneicon"
+                android:layout_marginStart="15dp"
+                android:textSize="15sp"
+                android:checked="true"
+                android:text="Yes"
+                />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/oneicon"
+                android:layout_below="@+id/yes"
+                android:layout_marginStart="15dp"
+                android:id="@+id/no"
+                android:textSize="15sp"
+                android:text="No"
+                />
+
+
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

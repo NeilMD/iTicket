@@ -1,0 +1,184 @@
+package com.example.julia.wirtec_iticket;
+
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.security.SecureRandom;
+import java.util.ArrayList;
+
+/**
+ * Created by Julia on 3/10/2017.
+ */
+
+public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewRequestsViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder>{
+
+    private ArrayList<String> data;
+    ViewGroup parent;
+
+    public ViewRequestsAdapter(ArrayList <String> data){
+        this.data = data;
+    }
+
+    @Override
+    //inflate XML (ticket)
+    public ViewRequestsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.parent = parent;
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.request, parent, false);
+        //parent = RecyclerView is the ViewGroup
+        //false = but will not be attached to it
+        //v is now inflated ticket.xml
+        return new ViewRequestsViewHolder(v);
+    }
+
+    @Override
+    //change content of TextView to current data
+    public void onBindViewHolder(ViewRequestsViewHolder holder, int position) {
+        String curr = data.get(position);
+        //set image
+        holder.name.setText(curr);
+        holder.name.setTypeface(null, Typeface.BOLD);
+        holder.event.setText(curr);
+        holder.email.setText(curr);
+        holder.numtickets.setText(curr);
+
+
+        holder.accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ContextThemeWrapper ctw = new ContextThemeWrapper(parent.getContext(), R.style.AlertDialogCustom);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Are you sure you want to accept this request?")
+                        .setCancelable(true)
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // get user input and set it to result
+                                        // edit text
+                                        Toast.makeText(parent.getContext(), "Request Accepted!", Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                        .setNegativeButton("No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+            }
+        });
+
+        holder.reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ContextThemeWrapper ctw = new ContextThemeWrapper(parent.getContext(), R.style.AlertDialogCustom);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Are you sure you want to reject this request?")
+                        .setCancelable(true)
+                        .setPositiveButton("Yes",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // get user input and set it to result
+                                        // edit text
+                                        Toast.makeText(parent.getContext(), "Request Denied!", Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                        .setNegativeButton("No",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+            }
+        });
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        return getItem(position).charAt(0);
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.header_test, parent, false);
+        return new RecyclerView.ViewHolder(view) {
+        };
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        TextView textView = (TextView) holder.itemView;
+        textView.setText(String.valueOf(getItem(position).charAt(0)));
+        holder.itemView.setBackgroundColor(parent.getResources().getColor(R.color.headers));
+    }
+
+    private int getRandomColor() {
+        SecureRandom rgen = new SecureRandom();
+        return Color.HSVToColor(150, new float[]{
+                rgen.nextInt(359), 1, 1
+        });
+    }
+
+
+    @Override
+    //
+    public int getItemCount() {
+        return data.size();
+    }
+
+    public class ViewRequestsViewHolder extends RecyclerView.ViewHolder{
+        dev.dworks.libs.astickyheader.ui.SquareImageView requestimage;
+        TextView event;
+        TextView name;
+        TextView numtickets;
+        TextView email;
+        ImageButton accept;
+        ImageButton reject;
+
+        public ViewRequestsViewHolder(View itemView){
+            super(itemView);
+
+            requestimage = (dev.dworks.libs.astickyheader.ui.SquareImageView) itemView.findViewById(R.id.requestimage);
+            event = (TextView) itemView.findViewById(R.id.requestevent);
+            name = (TextView) itemView.findViewById(R.id.name);
+            numtickets = (TextView) itemView.findViewById(R.id.numtickets);
+            email = (TextView) itemView.findViewById(R.id.email);
+            accept = (ImageButton) itemView.findViewById(R.id.accept);
+            reject = (ImageButton) itemView.findViewById(R.id.reject);
+        }
+
+
+
+    }
+}

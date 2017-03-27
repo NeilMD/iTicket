@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:longClickable="true"
+    android:clickable="true"
+    android:backgroundTint="#ffffff"
+    android:backgroundTintMode="add"
+    android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/ticket">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view3"
+        android:orientation="horizontal"
+        android:background="#95e695"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        card_view:cardElevation="5dp"
+        android:padding ="15dp">
+
+    <dev.dworks.libs.astickyheader.ui.SquareImageView
+        android:layout_width="65dp"
+        android:layout_height="6dp"
+        android:id="@+id/ticketimage"
+        android:scaleType="centerCrop"
+        android:layout_margin="10dp"
+        android:src="@drawable/ticketsbg"/>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:id="@+id/textcontainer"
+        android:layout_marginLeft="75dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:id="@+id/eventicon"
+            android:tint="@color/colorPrimary"
+            android:src="@drawable/ic_event"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+            android:paddingTop="4dp"
+            android:textSize="12sp"
+            android:id="@+id/event"
+            android:layout_toRightOf="@+id/eventicon"
+            android:textColor="@color/primary_text"/>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:id="@+id/placeicon"
+            android:layout_below="@+id/eventicon"
+            android:tint="@color/colorPrimary"
+            android:src="@drawable/ic_place_black_24dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/event"
+            android:paddingLeft="2dp"
+            android:paddingTop="4dp"
+            android:textSize="12sp"
+            android:layout_toRightOf="@+id/placeicon"
+            android:textColor="@color/primary_text"
+            android:id="@+id/place"/>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:id="@+id/datetimeicon"
+            android:tint="@color/colorPrimary"
+            android:layout_below="@+id/placeicon"
+            android:src="@drawable/overtime"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/place"
+            android:paddingLeft="2dp"
+            android:paddingTop="3dp"
+            android:textSize="12sp"
+            android:textColor="@color/primary_text"
+            android:layout_toRightOf="@+id/placeicon"
+            android:id="@+id/datetime"/>
+
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:id="@+id/numticketsicon"
+            android:tint="@color/colorPrimary"
+            android:layout_below="@+id/datetimeicon"
+            android:src="@drawable/ic_ticket"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/datetime"
+                android:paddingLeft="2dp"
+                android:paddingTop="3dp"
+                android:textColor="@color/primary_text"
+                android:layout_toRightOf="@+id/numticketsicon"
+                android:textSize="12sp"
+                android:id="@+id/numtickets"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/numtickets"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:padding="3dp"
+                android:textColor="@color/primary_text"
+                android:textSize="12sp"
+                android:id="@+id/status"/>
+
+
+    </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+</LinearLayout>

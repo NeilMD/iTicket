@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center_vertical">
+
+        <dev.dworks.libs.astickyheader.ui.SquareImageView
+            android:src="@drawable/ticketsbg"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+        <RadioButton
+            android:layout_gravity="center"
+            android:id="@+id/one"
+            android:text="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/second"
+        android:layout_toRightOf="@+id/first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center_vertical">
+
+        <dev.dworks.libs.astickyheader.ui.SquareImageView
+            android:src="@drawable/raffleticket"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+        <RadioButton
+            android:layout_gravity="center"
+            android:id="@+id/two"
+            android:text="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center_vertical">
+
+        <dev.dworks.libs.astickyheader.ui.SquareImageView
+            android:src="@drawable/specialevent"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+        <RadioButton
+            android:layout_gravity="center"
+            android:id="@+id/three"
+            android:text="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:id="@+id/eaccept"
+        android:layout_below="@+id/first"
+        android:text="Accept"/>
+
+</RelativeLayout>
