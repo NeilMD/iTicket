@@ -217,7 +217,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
-            // TODO: Verify if user account is verified
             Intent i = new Intent(getBaseContext(), NavDrawer.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

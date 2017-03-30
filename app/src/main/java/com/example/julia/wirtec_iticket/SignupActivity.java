@@ -26,14 +26,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,29 +53,23 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
     private AutoCompleteTextView mEmailView;
     private AutoCompleteTextView mPasswordView;
     private EditText reenterpassword;
-    private AutoCompleteTextView firstname;
-    private AutoCompleteTextView lastname;
+    private AutoCompleteTextView fullname;
     private View mProgressView;
     private View mLoginFormView;
-    private Button signup;
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener al;
-
     TextView signin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        auth = FirebaseAuth.getInstance();
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
-        firstname = (AutoCompleteTextView) findViewById(R.id.firstname);
-        lastname = (AutoCompleteTextView) findViewById(R.id.lastname);
+        fullname = (AutoCompleteTextView) findViewById(R.id.fullname);
         reenterpassword = (EditText) findViewById(R.id.reenterpassword);
 
         mPasswordView = (AutoCompleteTextView) findViewById(R.id.password);
@@ -97,37 +83,19 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
                 return false;
             }
         });
-        signup = (Button) findViewById(R.id.email_sign_up_button);
-        // TODO: Check errors. Check if we can get details from gmail.
-        signup.setOnClickListener(new View.OnClickListener() {
+
+        Button mEmailSignUpButton = (Button) findViewById(R.id.email_sign_up_button);
+        mEmailSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //
-                auth.createUserWithEmailAndPassword(mEmailView.getText().toString(),reenterpassword.getText().toString())
-                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                    }
-                });
-
+            public void onClick(View view) {
+                attemptLogin();
             }
         });
+
         signin = (TextView) findViewById(R.id.link_signin);
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent i = new Intent(getBaseContext(), LoginActivity.class);
                 startActivity(i);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
@@ -193,16 +161,14 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-        lastname.setError(null);
-        firstname.setError(null);
+        fullname.setError(null);
         reenterpassword.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString().trim();
         String password = mPasswordView.getText().toString().trim();
         String rpassword = reenterpassword.getText().toString().trim();
-        String fname = firstname.getText().toString().trim();
-        String lname = lastname.getText().toString().trim();
+        String fname = fullname.getText().toString().trim();
 
         boolean cancel = false;
         View focusView = null;
@@ -241,23 +207,14 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(lname)) {
-            lastname.setError(getString(R.string.error_field_required));
-            focusView = lastname;
-            cancel = true;
-        }else if (lname.length() > 20) {
-            lastname.setError("Last name should be 20 letters or less");
-            focusView = lastname;
-            cancel = true;
-        }
 
         if (TextUtils.isEmpty(fname)) {
-            firstname.setError(getString(R.string.error_field_required));
-            focusView = firstname;
+            fullname.setError(getString(R.string.error_field_required));
+            focusView = fullname;
             cancel = true;
-        }else if (fname.length() > 20) {
-            firstname.setError("First name should be 20 letters or less");
-            focusView = firstname;
+        }else if (fname.length() > 41) {
+            fullname.setError("First name should be 41 characters or less");
+            focusView = fullname;
             cancel = true;
         }
 
@@ -269,7 +226,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new SignupActivity.UserSignupTask(fname, lname, email, password);
+            mAuthTask = new SignupActivity.UserSignupTask(fname, email, password);
             mAuthTask.execute((Void) null);
             Intent i = new Intent(getBaseContext(), NavDrawer.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -389,16 +346,14 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
      */
     public class UserSignupTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String firstname;
-        private final String lastname;
+        private final String fullname;
         private final String mEmail;
         private final String mPassword;
 
-        UserSignupTask(String fname, String lname, String email, String password) {
+        UserSignupTask(String fname, String email, String password) {
             mEmail = email;
             mPassword = password;
-            firstname = fname;
-            lastname = lname;
+            fullname = fname;
         }
 
         @Override

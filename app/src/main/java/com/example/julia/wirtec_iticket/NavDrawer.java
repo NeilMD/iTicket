@@ -77,7 +77,7 @@ public class NavDrawer extends AppCompatActivity {
         viewPagerAdapter.addFragments(viewRequests, "View Requests");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabTextColors(Color.WHITE, getResources().getColor(R.color.colorAccent));
+        tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_ticketwhite);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_eventwhite);
@@ -112,6 +112,9 @@ public class NavDrawer extends AppCompatActivity {
                 final EditText userInput = (EditText) promptsView
                         .findViewById(R.id.editTextDialogUserInput);
 
+                final EditText numberInput = (EditText) promptsView
+                        .findViewById(R.id.editTextDialogNumberInput);
+
                 // set dialog message
                 alertDialogBuilder
                         .setCancelable(false)
@@ -120,7 +123,7 @@ public class NavDrawer extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog,int id) {
                                         // get user input and set it to result
                                         // edit text
-                                        Toast.makeText(activity, "Entered code: " + userInput.getText() + "!", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(activity, "Entered code: " + userInput.getText() + "! \n Number of Tickets Reserved: " + numberInput.getText(), Toast.LENGTH_LONG).show();
                                     }
                                 })
                         .setNegativeButton("Cancel",
