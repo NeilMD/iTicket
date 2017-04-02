@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.*;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
@@ -20,9 +22,11 @@ import java.util.ArrayList;
 public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.ViewTicketsViewHolder>{
 
     private ArrayList<String> data;
+    private DatabaseReference ref;
     private LayoutInflater mInflater;
 
-    public ViewTicketsAdapter(ArrayList <String> data){
+    public ViewTicketsAdapter(ArrayList <String> data, DatabaseReference ref){
+        this.ref = ref;
         this.data = data;
     }
 

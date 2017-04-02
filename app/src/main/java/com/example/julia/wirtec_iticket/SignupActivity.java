@@ -26,6 +26,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,13 +70,17 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
     private AutoCompleteTextView fullname;
     private View mProgressView;
     private View mLoginFormView;
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener al;
+    private DatabaseReference ref;
     TextView signin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
+        auth = FirebaseAuth.getInstance();
+        ref = FirebaseDatabase.getInstance().getReference().child("users");
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -153,6 +171,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+    boolean authT = false;
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -165,10 +184,10 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
         reenterpassword.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString().trim();
-        String password = mPasswordView.getText().toString().trim();
+        final String email = mEmailView.getText().toString().trim();
+        final String password = mPasswordView.getText().toString().trim();
         String rpassword = reenterpassword.getText().toString().trim();
-        String fname = fullname.getText().toString().trim();
+        final String fname = fullname.getText().toString().trim();
 
         boolean cancel = false;
         View focusView = null;
@@ -226,14 +245,70 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new SignupActivity.UserSignupTask(fname, email, password);
-            mAuthTask.execute((Void) null);
-            Intent i = new Intent(getBaseContext(), NavDrawer.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(i);
-            finish();
+//            mAuthTask = new SignupActivity.UserSignupTask(fname, email, password);
+//            mAuthTask.execute((Void) null);
+            auth = FirebaseAuth.getInstance();
+            ref = FirebaseDatabase.getInstance().getReference().child("users");
+//            ref.runTransaction(new Transaction.Handler() {
+//                @Override
+//                public Transaction.Result doTransaction(MutableData mutableData) {
+//                    return null;
+//                }
+//
+//                @Override
+//                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+//
+//                }
+//            });
+            auth.createUserWithEmailAndPassword(email,password)
+                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+
+                            Account n = new Account(fullname.getText().toString() ,mEmailView.getText().toString());
+                            String key = ref.push().getKey();
+                            ref.child(key).setValue(n).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    showProgress(false);
+                                    Toast.makeText(getBaseContext(),"Failed: " + e,Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(getBaseContext(), NavDrawer.class);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            });
+
+
+
+
+
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                   showProgress(false);
+                    Toast.makeText(getBaseContext(),"Failed:"  + e, Toast.LENGTH_SHORT).show();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+//                    Toast.makeText(getBaseContext(),"Complete",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+
+
+
         }
     }
 
@@ -358,14 +433,13 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            // TODO: error checking of same account
+
+
             // TODO: attempt authentication against a network service.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+
+
 
 
             //search through exsiting credentials to see if acct with email already exists
@@ -379,6 +453,12 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
 
             // TODO: register the new account here.
             return true;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            showProgress(true);
+            super.onPreExecute();
         }
 
         @Override

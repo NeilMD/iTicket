@@ -16,6 +16,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
@@ -61,10 +65,10 @@ public class ViewTickets extends Fragment {
         data.add("Lima");
         data.add("Mama");
 
-
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         if(rvTickets != null) {
-            viewTicketsAdapter = new ViewTicketsAdapter(data);
+            viewTicketsAdapter = new ViewTicketsAdapter(data,ref);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvTickets.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvTickets.getContext());
@@ -123,7 +127,8 @@ public class ViewTickets extends Fragment {
     private void refreshContent(){ new Handler().postDelayed(new Runnable(){
         @Override
         public void run() {
-            viewTicketsAdapter = new ViewTicketsAdapter(data);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            viewTicketsAdapter = new ViewTicketsAdapter(data,ref);
             rvTickets.setAdapter(viewTicketsAdapter);
             swipeContainer.setRefreshing(false);
         }
