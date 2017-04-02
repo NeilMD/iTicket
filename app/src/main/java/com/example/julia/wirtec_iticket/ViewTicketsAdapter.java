@@ -10,6 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.*;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import java.security.SecureRandom;
@@ -24,10 +27,64 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
     private ArrayList<String> data;
     private DatabaseReference ref;
     private LayoutInflater mInflater;
+    private ChildEventListener cel;
+
+    private ArrayList<String> eid = new ArrayList<>();
+    private ArrayList<Event> e = new ArrayList<>();
 
     public ViewTicketsAdapter(ArrayList <String> data, DatabaseReference ref){
         this.ref = ref;
         this.data = data;
+
+        ChildEventListener cel2 = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Event eve = dataSnapshot.getValue(Event.class);
+
+                eid.add(dataSnapshot.getKey());
+                e.add(eve);
+
+                notifyItemInserted(e.size() - 1);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Event ne = dataSnapshot.getValue(Event.class);
+                String neid = dataSnapshot.getKey();
+
+                int idx = eid.indexOf(neid);
+                if(idx > -1 ){
+                    e.set(idx,ne);
+                    notifyItemChanged(idx);
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String eke = dataSnapshot.getKey();
+                int index = eid.indexOf(eke);
+                if(index > -1){
+                    eid.remove(index);
+                    e.remove(index);
+                    notifyItemRemoved(index);
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addChildEventListener(cel2);
+        cel =cel2;
+
+
     }
 
     @Override
@@ -44,21 +101,23 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return e.size();
     }
 
 
     @Override
     //change content of TextView to current data
     public void onBindViewHolder(ViewTicketsViewHolder holder, int position) {
+        Event currE = e.get(position);
+
         String curr = data.get(position);
         //set image here
-        holder.event.setText(curr);
+        holder.event.setText(currE.getEventname());
         holder.event.setTypeface(null, Typeface.BOLD);
-        holder.place.setText(curr);
-        holder.datetime.setText(curr);
-        holder.numtickets.setText(curr);
-        holder.status.setText("STATUS");
+        holder.place.setText(currE.getPlace());
+        holder.datetime.setText(currE.getPlace() + ", "+ currE.getTime() );
+        holder.numtickets.setText(currE.getNumberOfTickets()+ "");
+        holder.status.setText(currE.getStatus());
         holder.status.setTypeface(null, Typeface.BOLD);
         /**set text background accdg to status
          <WHITE = UNUSED>
