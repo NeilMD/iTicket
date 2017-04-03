@@ -7,7 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Julia on 3/10/2017.
@@ -16,9 +24,64 @@ import java.util.ArrayList;
 public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.ViewEventViewHolder>{
 
     private ArrayList<String> data;
+    private DatabaseReference ref;
+    private ChildEventListener cel;
 
-    public ViewEventAdapter(ArrayList <String> data){
+    private ArrayList<Event> e = new ArrayList<>();
+    private ArrayList<String> eid = new ArrayList<>();
+
+    public ViewEventAdapter(ArrayList <String> data, DatabaseReference ref){
         this.data = data;
+        this.ref = ref;
+
+        ChildEventListener cel2 = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Event eve = dataSnapshot.getValue(Event.class);
+
+                eid.add(dataSnapshot.getKey());
+                e.add(eve);
+
+                notifyItemInserted(e.size() - 1);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Event ne = dataSnapshot.getValue(Event.class);
+                String neid = dataSnapshot.getKey();
+
+                int idx = eid.indexOf(neid);
+                if(idx > -1 ){
+                    e.set(idx,ne);
+                    notifyItemChanged(idx);
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String eke = dataSnapshot.getKey();
+                int index = eid.indexOf(eke);
+                if(index > -1){
+                    eid.remove(index);
+                    e.remove(index);
+                    notifyItemRemoved(index);
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addChildEventListener(cel2);
+        cel = cel2;
+
     }
 
     @Override
@@ -34,19 +97,23 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
     @Override
     //change content of TextView to current data
     public void onBindViewHolder(ViewEventViewHolder holder, int position) {
-        String curr = data.get(position);
+        Event te = e.get(position);
         //set image
-        holder.event.setText(curr);
+        holder.event.setText(te.getEventname());
         holder.event.setTypeface(null, Typeface.BOLD);
-        holder.place.setText(curr);
-        holder.datetime.setText(curr);
-        holder.attendees.setText(curr);
+        holder.place.setText(te.getPlace());
+        Date n = new Date(te.getDate());
+        n.setTime(te.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMMMMMMM dd, yyyy ' at ' HH:mm", Locale.ENGLISH);
+
+        holder.datetime.setText(simpleDateFormat.format(n));
+        holder.attendees.setText(te.getChecker());
     }
 
     @Override
     //
     public int getItemCount() {
-        return data.size();
+        return e.size();
     }
 
     public class ViewEventViewHolder extends RecyclerView.ViewHolder{

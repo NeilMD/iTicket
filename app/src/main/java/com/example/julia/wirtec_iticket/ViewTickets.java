@@ -69,6 +69,7 @@ public class ViewTickets extends Fragment {
 
         if(rvTickets != null) {
             viewTicketsAdapter = new ViewTicketsAdapter(data,ref);
+
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvTickets.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvTickets.getContext());
@@ -94,16 +95,16 @@ public class ViewTickets extends Fragment {
         });
 
 
+//        rvTickets.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override public void onItemClick(View view, int position) {
+//                        //depending on position of Child, populate ViewEventDetails, refer to RecyclerItemClickListener class for methods
+//                        Intent i = new Intent(navDrawer, ViewTicketDetails.class);
+//                        startActivity(i);
+//                    }
+//                })
+//        );
 
-        rvTickets.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        //depending on position of Child, populate ViewEventDetails, refer to RecyclerItemClickListener class for methods
-                        Intent i = new Intent(navDrawer, ViewTicketDetails.class);
-                        startActivity(i);
-                    }
-                })
-        );
 
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.tickets_swipe_refresh_layout);

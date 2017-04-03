@@ -117,8 +117,19 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         holder.place.setText(currE.getPlace());
         holder.datetime.setText(currE.getPlace() + ", "+ currE.getTime() );
         holder.numtickets.setText(currE.getNumberOfTickets()+ "");
-        holder.status.setText(currE.getStatus());
+        holder.status.setText("Sta");
         holder.status.setTypeface(null, Typeface.BOLD);
+        holder.con.setTag(position);
+        holder.con.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnItemClickListener != null){
+                    int position = (int) v.getTag();
+                    mOnItemClickListener.onItemClick(e.get(position),eid.get(position));
+                }
+            }
+        });
+
         /**set text background accdg to status
          <WHITE = UNUSED>
          <GREEN = USED>
@@ -138,6 +149,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         TextView datetime;
         TextView numtickets;
         TextView status;
+        View con;
 
         public ViewTicketsViewHolder(View itemView) {
             super(itemView);
@@ -147,9 +159,19 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
             datetime = (TextView) itemView.findViewById(R.id.datetime);
             numtickets = (TextView) itemView.findViewById(R.id.numtickets);
             status = (TextView) itemView.findViewById(R.id.status);
+            con = itemView.findViewById(R.id.ticket);
         }
 
 
+    }
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setmOnItemClickListener(OnItemClickListener onItemClickListener){
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        public void onItemClick(Event event, String eventId);
     }
 
 

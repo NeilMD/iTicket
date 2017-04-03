@@ -71,8 +71,9 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
     private View mProgressView;
     private View mLoginFormView;
     private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener al;
     private DatabaseReference ref;
+    private FirebaseAuth.AuthStateListener al;
+
     TextView signin;
 
     @Override

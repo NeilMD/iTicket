@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,7 +28,15 @@ import android.widget.RadioButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Calendar;
 
@@ -36,6 +45,9 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     java.util.Calendar newDate;
+    private  Date dateEvent;
+    private FirebaseAuth auth;
+    private DatabaseReference ref;
     int dateyear, month, day, hour, timeminute;
     boolean timecorrect = true, datecorrect = true;
     boolean dateset;
@@ -182,7 +194,8 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                 String eplace = place.getText().toString().trim();
                 String eprice = price.getText().toString().trim();
                 String elimit = ticketlimit.getText().toString().trim();
-                String edatetime = datetime.getText().toString().trim();
+                final String edatetime = datetime.getText().toString().trim();
+
                 String eabout = about.getText().toString().trim();
 
                 if (TextUtils.isEmpty(eabout)) {
@@ -248,6 +261,24 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                 if (!cancel) {
                     ContextThemeWrapper ctw = new ContextThemeWrapper(AddEvent.this, R.style.AlertDialogCustom);
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+                    //TODO: make event here. FIX
+                    auth = FirebaseAuth.getInstance();
+                    ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(auth.getCurrentUser().getUid());
+                    int temp = dateEvent.getDate()+dateEvent.getYear()+dateEvent.getMonth();
+                    Event ee = new Event("aaaaa",ename,eabout, (long) temp,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
+                    String key = ref.push().getKey();
+                    ref.child(key).setValue(ee).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getBaseContext(),"Failed: "+ e,Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Toast.makeText(AddEvent.this, "Event Created! Request Code Available in Event Details!"+ edatetime, Toast.LENGTH_LONG).show();
 
                     // set dialog message
                     alertDialogBuilder
@@ -258,7 +289,8 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                                         public void onClick(DialogInterface dialog, int id) {
                                             // get user input and set it to result
                                             // edit text
-                                            Toast.makeText(AddEvent.this, "Event Created! Request Code Available in Event Details!", Toast.LENGTH_LONG).show();
+
+
                                             Intent i = new Intent(AddEvent.this, NavDrawer.class);
                                             startActivity(i);
                                             finish();
@@ -302,8 +334,13 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     newDate = java.util.Calendar.getInstance();
                     dateyear = year;
+
                     month = monthOfYear;
                     day = dayOfMonth;
+
+//                    dateEvent.setMonth(monthOfYear);
+//                    dateEvent.setYear(year);
+//                    dateEvent.setDate(dayOfMonth);
                     if(newCalendar.get(Calendar.YEAR) > dateyear || newCalendar.get(java.util.Calendar.YEAR) == dateyear && newCalendar.get(java.util.Calendar.MONTH) > month || newCalendar.get(java.util.Calendar.YEAR) == dateyear && newCalendar.get(java.util.Calendar.MONTH) == month &&  newCalendar.get(java.util.Calendar.DAY_OF_MONTH) > day){
                         datecorrect = false;
                         Toast.makeText(getBaseContext(), "Date is invalid! Please enter valid date.", Toast.LENGTH_LONG).show();
@@ -338,6 +375,11 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                     }
                     if (timecorrect){
                         newDate.set(dateyear, month, day, hour, timeminute);
+
+                        dateEvent = new Date(dateyear,month ,day);
+                        Time t = new Time(hourOfDay,minute,0);
+                        dateEvent.setTime(t.getTime());
+
                         datetime.setText(simpleDateFormat.format(newDate.getTime()));
                     }
 

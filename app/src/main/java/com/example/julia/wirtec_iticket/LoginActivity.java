@@ -5,9 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.*;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -100,6 +102,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
+        SharedPreferences sp =  PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String temp = sp.getString("username",null);
+        if(temp != null){
+            String username = sp.getString("username",null);
+            String password = sp.getString("password",null);
+
+            mEmailView.setText(username);
+            mPasswordView.setText(password);
+
+        }
 
 
 
@@ -107,6 +119,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 attemptLogin();
 
             }
@@ -127,6 +141,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
     }
+    private void sharedPref(String email, String password){
+        auth = FirebaseAuth.getInstance();
+        auth.signInWithEmailAndPassword(email,password)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        Intent i = new Intent(getBaseContext(), NavDrawer.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(i);
+
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showProgress(false);
+                Toast.makeText(getBaseContext(),"Failed: "+e ,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -224,9 +262,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
+            auth = FirebaseAuth.getInstance();
+            auth.signInWithEmailAndPassword(email,password)
+                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
 
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            // Saved data
+                            SharedPreferences sp =  PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+                            SharedPreferences.Editor spe =  sp.edit();
+                            spe.putString("username", mEmailView.getText().toString());
+                            spe.commit();
+                            spe.putString("password",mPasswordView.getText().toString());
+                            spe.commit();
+
+                            // TO new activity
+
+                            Intent i = new Intent(getBaseContext(), NavDrawer.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                            startActivity(i);
+
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    showProgress(false);
+                    Toast.makeText(getBaseContext(),"Failed: "+e ,Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
     }
@@ -352,27 +422,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            auth = FirebaseAuth.getInstance();
-            auth.signInWithEmailAndPassword(mEmail,mPassword)
-                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
 
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            Intent i = new Intent(getBaseContext(), NavDrawer.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            startActivity(i);
-
-                        }
-
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    showProgress(false);
-                    Toast.makeText(getBaseContext(),"Failed: "+e ,Toast.LENGTH_SHORT).show();
-                }
-            });
 //            try {
 //                // Simulate network access.
 //                Thread.sleep(2000);

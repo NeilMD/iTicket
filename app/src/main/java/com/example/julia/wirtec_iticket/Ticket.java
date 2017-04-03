@@ -1,32 +1,33 @@
 package com.example.julia.wirtec_iticket;
 
 /**
- * Created by shinichi on 4/2/17.
+ * Created by shinichi on 4/3/17.
  */
 
-public class Event {
+public class Ticket {
     private String code;
     private String eventname;
     private String eventdesc;
     private Long date;
     private Long time;
-    private Long numberOfTickets;
-    private Boolean limitToOne;
     private String place;
+    private String status;
+    private String orderInfo;
     private String checker;
 
-    public Event() {
+    public Ticket() {
+
     }
 
-    public Event(String code, String eventname, String eventdesc, Long date, Long time, Long numberOfTickets, Boolean limitToOne, String place, String checker) {
+    public Ticket(String code, String eventname, String eventdesc, Long date, Long time, String place, String status, String orderInfo, String checker) {
         this.code = code;
         this.eventname = eventname;
         this.eventdesc = eventdesc;
         this.date = date;
         this.time = time;
-        this.numberOfTickets = numberOfTickets;
-        this.limitToOne = limitToOne;
         this.place = place;
+        this.status = status;
+        this.orderInfo = orderInfo;
         this.checker = checker;
     }
 
@@ -54,19 +55,19 @@ public class Event {
         this.eventdesc = eventdesc;
     }
 
-    public long getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(long date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 
-    public long getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
@@ -78,28 +79,27 @@ public class Event {
         this.place = place;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getOrderInfo() {
+        return orderInfo;
+    }
+
+    public void setOrderInfo(String orderInfo) {
+        this.orderInfo = orderInfo;
+    }
+
     public String getChecker() {
         return checker;
     }
 
     public void setChecker(String checker) {
         this.checker = checker;
-    }
-
-
-    public long getNumberOfTickets() {
-        return numberOfTickets;
-    }
-
-    public void setNumberOfTickets(long numberOfTickets) {
-        this.numberOfTickets = numberOfTickets;
-    }
-
-    public Boolean getLimitToOne() {
-        return limitToOne;
-    }
-
-    public void setLimitToOne(Boolean limitToOne) {
-        this.limitToOne = limitToOne;
     }
 }

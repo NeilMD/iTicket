@@ -12,6 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 
@@ -56,9 +60,9 @@ public class ViewEvents extends Fragment {
         data.add("Lima");
         data.add("Mama");
 
-
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         if(rvEvents != null) {
-            viewEventAdapter = new ViewEventAdapter(data);
+            viewEventAdapter = new ViewEventAdapter(data,ref);
            layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvEvents.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvEvents.getContext());
@@ -113,7 +117,8 @@ public class ViewEvents extends Fragment {
     private void refreshContent(){ new Handler().postDelayed(new Runnable(){
         @Override
         public void run() {
-            viewEventAdapter = new ViewEventAdapter(data);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            viewEventAdapter = new ViewEventAdapter(data,ref);
             rvEvents.setAdapter(viewEventAdapter);
             swipeContainer.setRefreshing(false);
         }
