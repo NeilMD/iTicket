@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 
@@ -58,7 +62,8 @@ public class ViewRequests extends Fragment {
         data.add("Mama");
 
         if(rvRequests != null) {
-            viewRequestsAdapter = new ViewRequestsAdapter(data);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
             viewRequestsAdapter.addAll(data);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvRequests.setLayoutManager(layoutManager);
@@ -137,7 +142,8 @@ public class ViewRequests extends Fragment {
     private void refreshContent(){ new Handler().postDelayed(new Runnable(){
         @Override
         public void run() {
-            viewRequestsAdapter = new ViewRequestsAdapter(data);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
             viewRequestsAdapter.addAll(data);
             rvRequests.setAdapter(viewRequestsAdapter);
             swipeContainer.setRefreshing(false);

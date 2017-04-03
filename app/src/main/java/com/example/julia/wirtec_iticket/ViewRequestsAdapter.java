@@ -14,6 +14,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
@@ -23,11 +28,66 @@ import java.util.ArrayList;
 
 public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewRequestsViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder>{
 
+    private DatabaseReference ref;
+    private ChildEventListener cel;
+
+    private ArrayList<Request> e = new ArrayList<>();
+    private ArrayList<String> eid = new ArrayList<>();
+
     private ArrayList<String> data;
     ViewGroup parent;
 
-    public ViewRequestsAdapter(ArrayList <String> data){
+    public ViewRequestsAdapter(ArrayList <String> data, DatabaseReference ref){
+        this.ref = ref;
         this.data = data;
+        ChildEventListener cel2 = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Request eve = dataSnapshot.getValue(Request.class);
+
+                eid.add(dataSnapshot.getKey());
+                e.add(eve);
+
+                notifyItemInserted(e.size() - 1);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Request ne = dataSnapshot.getValue(Request.class);
+                String neid = dataSnapshot.getKey();
+
+                int idx = eid.indexOf(neid);
+                if(idx > -1 ){
+                    e.set(idx,ne);
+                    notifyItemChanged(idx);
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String eke = dataSnapshot.getKey();
+                int index = eid.indexOf(eke);
+                if(index > -1){
+                    eid.remove(index);
+                    e.remove(index);
+                    notifyItemRemoved(index);
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addChildEventListener(cel2);
+        cel = cel2;
+
     }
 
     @Override
