@@ -30,7 +30,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
     private ChildEventListener cel;
 
     private ArrayList<String> eid = new ArrayList<>();
-    private ArrayList<Event> e = new ArrayList<>();
+    private ArrayList<Ticket> e = new ArrayList<>();
 
     public ViewTicketsAdapter(ArrayList <String> data, DatabaseReference ref){
         this.ref = ref;
@@ -39,7 +39,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         ChildEventListener cel2 = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Event eve = dataSnapshot.getValue(Event.class);
+                Ticket eve = dataSnapshot.getValue(Ticket.class);
 
                 eid.add(dataSnapshot.getKey());
                 e.add(eve);
@@ -49,7 +49,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Event ne = dataSnapshot.getValue(Event.class);
+                Ticket ne = dataSnapshot.getValue(Ticket.class);
                 String neid = dataSnapshot.getKey();
 
                 int idx = eid.indexOf(neid);
@@ -108,7 +108,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
     @Override
     //change content of TextView to current data
     public void onBindViewHolder(ViewTicketsViewHolder holder, int position) {
-        Event currE = e.get(position);
+        Ticket currE = e.get(position);
 
         String curr = data.get(position);
         //set image here
@@ -116,7 +116,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         holder.event.setTypeface(null, Typeface.BOLD);
         holder.place.setText(currE.getPlace());
         holder.datetime.setText(currE.getPlace() + ", "+ currE.getTime() );
-        holder.numtickets.setText(currE.getNumberOfTickets()+ "");
+        holder.numtickets.setText(currE.getEventname() + "");
         holder.status.setText("Sta");
         holder.status.setTypeface(null, Typeface.BOLD);
         holder.con.setTag(position);
@@ -141,6 +141,15 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
     }
 
 
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setmOnItemClickListener(OnItemClickListener onItemClickListener){
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        public void onItemClick(Ticket ticket, String ticketId);
+    }
 
     public class ViewTicketsViewHolder extends RecyclerView.ViewHolder {
         dev.dworks.libs.astickyheader.ui.SquareImageView image;
@@ -164,15 +173,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
 
 
     }
-    private OnItemClickListener mOnItemClickListener;
 
-    public void setmOnItemClickListener(OnItemClickListener onItemClickListener){
-        mOnItemClickListener = onItemClickListener;
-    }
-
-    public interface OnItemClickListener{
-        public void onItemClick(Event event, String eventId);
-    }
 
 
 }

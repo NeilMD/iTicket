@@ -105,6 +105,16 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
         Date n = new Date(te.getDate());
         n.setTime(te.getTime());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMMMMMMM dd, yyyy ' at ' HH:mm", Locale.ENGLISH);
+        holder.v.setTag(position);
+        holder.v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnItemEventClickListener != null){
+                    int position = (int) v.getTag();
+                    mOnItemEventClickListener.onItemClick(e.get(position),eid.get(position));
+                }
+            }
+        });
 
         holder.datetime.setText(simpleDateFormat.format(n));
         holder.attendees.setText(te.getChecker());
@@ -116,13 +126,25 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
         return e.size();
     }
 
+
+    private OnItemEventClickListener mOnItemEventClickListener;
+
+    public void setmOnItemEventClickListener(OnItemEventClickListener onItemEventClickListener){
+        mOnItemEventClickListener = onItemEventClickListener;
+    }
+
+    public interface OnItemEventClickListener{
+        public void onItemClick(Event event, String eventId);
+    }
+
+
     public class ViewEventViewHolder extends RecyclerView.ViewHolder{
         dev.dworks.libs.astickyheader.ui.SquareImageView eventimage;
         TextView event;
         TextView place;
         TextView datetime;
         TextView attendees;
-
+        View v;
         public ViewEventViewHolder (View itemView){
             super(itemView);
             eventimage = (dev.dworks.libs.astickyheader.ui.SquareImageView) itemView.findViewById(R.id.eventimage);
@@ -130,6 +152,7 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
             place = (TextView) itemView.findViewById(R.id.eventplace);
             datetime = (TextView) itemView.findViewById(R.id.eventdatetime);
             attendees = (TextView) itemView.findViewById(R.id.attendees);
+            v = itemView.findViewById(R.id.ticket);
 
         }
 

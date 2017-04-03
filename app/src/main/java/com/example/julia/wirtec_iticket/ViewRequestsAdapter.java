@@ -143,12 +143,12 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         holder.itemView.setBackgroundColor(parent.getResources().getColor(R.color.headers));
     }
 
-    private int getRandomColor() {
-        SecureRandom rgen = new SecureRandom();
-        return Color.HSVToColor(150, new float[]{
-                rgen.nextInt(359), 1, 1
-        });
-    }
+//    private int getRandomColor() {
+//        SecureRandom rgen = new SecureRandom();
+//        return Color.HSVToColor(150, new float[]{
+//                rgen.nextInt(359), 1, 1
+//        });
+//    }
 
 
     @Override

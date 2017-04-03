@@ -68,8 +68,16 @@ public class ViewTickets extends Fragment {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         if(rvTickets != null) {
+
             viewTicketsAdapter = new ViewTicketsAdapter(data,ref);
 
+
+            viewTicketsAdapter.setmOnItemClickListener(new ViewTicketsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Event event, String eventId) {
+
+                }
+            });
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvTickets.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvTickets.getContext());
@@ -130,6 +138,16 @@ public class ViewTickets extends Fragment {
         public void run() {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewTicketsAdapter = new ViewTicketsAdapter(data,ref);
+
+            viewTicketsAdapter.setmOnItemClickListener(new ViewTicketsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Event event, String eventId) {
+
+                }
+            });
+
+
+
             rvTickets.setAdapter(viewTicketsAdapter);
             swipeContainer.setRefreshing(false);
         }

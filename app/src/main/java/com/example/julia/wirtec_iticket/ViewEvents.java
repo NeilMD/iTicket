@@ -63,6 +63,14 @@ public class ViewEvents extends Fragment {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         if(rvEvents != null) {
             viewEventAdapter = new ViewEventAdapter(data,ref);
+
+            viewEventAdapter.setmOnItemEventClickListener(new ViewEventAdapter.OnItemEventClickListener() {
+                @Override
+                public void onItemClick(Event event, String eventId) {
+
+                }
+            });
+
            layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvEvents.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvEvents.getContext());
@@ -86,15 +94,15 @@ public class ViewEvents extends Fragment {
 
         });
 
-        rvEvents.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
-                        //depending on position of Child, populate ViewEventDetails, refer to RecyclerItemClickListener class for methods
-                        Intent i = new Intent(navDrawer, ViewEventDetails.class);
-                        startActivity(i);
-                    }
-                })
-        );
+//        rvEvents.addOnItemTouchListener(
+//                new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override public void onItemClick(View view, int position) {
+//                        //depending on position of Child, populate ViewEventDetails, refer to RecyclerItemClickListener class for methods
+//                        Intent i = new Intent(navDrawer, ViewEventDetails.class);
+//                        startActivity(i);
+//                    }
+//                })
+//        );
 
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.events_swipe_refresh_layout);
@@ -119,6 +127,16 @@ public class ViewEvents extends Fragment {
         public void run() {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewEventAdapter = new ViewEventAdapter(data,ref);
+
+            viewEventAdapter.setmOnItemEventClickListener(new ViewEventAdapter.OnItemEventClickListener() {
+                @Override
+                public void onItemClick(Event event, String eventId) {
+
+                }
+            });
+
+
+
             rvEvents.setAdapter(viewEventAdapter);
             swipeContainer.setRefreshing(false);
         }
