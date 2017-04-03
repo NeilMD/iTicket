@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -74,8 +75,11 @@ public class ViewTickets extends Fragment {
 
             viewTicketsAdapter.setmOnItemClickListener(new ViewTicketsAdapter.OnItemClickListener() {
                 @Override
-                public void onItemClick(Event event, String eventId) {
+                public void onItemClick(Ticket ticket, String ticketId) {
+                    Intent i = new Intent(navDrawer, ViewTicketDetails.class);
 
+//                    i.putExtra("ticket")
+                    startActivity(i);
                 }
             });
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -141,8 +145,11 @@ public class ViewTickets extends Fragment {
 
             viewTicketsAdapter.setmOnItemClickListener(new ViewTicketsAdapter.OnItemClickListener() {
                 @Override
-                public void onItemClick(Event event, String eventId) {
+                public void onItemClick(Ticket ticket, String ticketId) {
+                    Intent i = new Intent(navDrawer, ViewTicketDetails.class);
 
+//                    i.putExtra("ticket")
+                    startActivity(i);
                 }
             });
 

@@ -67,7 +67,8 @@ public class ViewEvents extends Fragment {
             viewEventAdapter.setmOnItemEventClickListener(new ViewEventAdapter.OnItemEventClickListener() {
                 @Override
                 public void onItemClick(Event event, String eventId) {
-
+                    Intent i = new Intent(navDrawer, ViewEventDetails.class);
+                    startActivity(i);
                 }
             });
 
@@ -131,7 +132,8 @@ public class ViewEvents extends Fragment {
             viewEventAdapter.setmOnItemEventClickListener(new ViewEventAdapter.OnItemEventClickListener() {
                 @Override
                 public void onItemClick(Event event, String eventId) {
-
+                    Intent i = new Intent(navDrawer, ViewEventDetails.class);
+                    startActivity(i);
                 }
             });
 
