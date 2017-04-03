@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,8 +104,11 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
         holder.event.setTypeface(null, Typeface.BOLD);
         holder.place.setText(te.getPlace());
         Date n = new Date(te.getDate());
-        n.setTime(te.getTime());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMMMMMMM dd, yyyy ' at ' HH:mm", Locale.ENGLISH);
+        Time n2 = new Time(te.getTime());
+
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMMMMMMM dd, yyyy ' at '", Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(" HH:mm", Locale.ENGLISH);
         holder.v.setTag(position);
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +120,7 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
             }
         });
 
-        holder.datetime.setText(simpleDateFormat.format(n));
+        holder.datetime.setText(simpleDateFormat.format(n) + simpleDateFormat2.format(n2));
         holder.attendees.setText(te.getChecker());
     }
 

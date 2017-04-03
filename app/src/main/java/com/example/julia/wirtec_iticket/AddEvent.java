@@ -1,11 +1,14 @@
 package com.example.julia.wirtec_iticket;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -45,7 +48,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     java.util.Calendar newDate;
-    private  Date dateEvent;
+    private  Date dateEvent = new Date();
     private FirebaseAuth auth;
     private DatabaseReference ref;
     int dateyear, month, day, hour, timeminute;
@@ -53,6 +56,8 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
     boolean dateset;
     SimpleDateFormat simpleDateFormat;
     Activity thisactivity;
+
+    private long dateInMil;
 
 
 
@@ -264,8 +269,8 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                     //TODO: make event here. FIX
                     auth = FirebaseAuth.getInstance();
                     ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(auth.getCurrentUser().getUid());
-                    int temp = dateEvent.getDate()+dateEvent.getYear()+dateEvent.getMonth();
-                    Event ee = new Event("aaaaa",ename,eabout, (long) temp,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
+
+                    Event ee = new Event("aaaaa",ename,eabout, dateInMil ,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
                     String key = ref.push().getKey();
                     ref.child(key).setValue(ee).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -276,39 +281,46 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
+
                         }
                     });
-                    Toast.makeText(AddEvent.this, "Event Created! Request Code Available in Event Details!"+ edatetime, Toast.LENGTH_LONG).show();
+                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("event-code").child(ee.getCode());
+                    ref.child("owneruid").setValue(auth.getCurrentUser().getUid());
+                    ref.child("event").setValue(key);
 
-                    // set dialog message
-                    alertDialogBuilder
-                            .setMessage("Are you sure you want to add this event?")
-                            .setCancelable(true)
-                            .setPositiveButton("Yes",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            // get user input and set it to result
-                                            // edit text
+                    Intent i = new Intent(AddEvent.this, NavDrawer.class);
+                    startActivity(i);
+                    finish();
 
-
-                                            Intent i = new Intent(AddEvent.this, NavDrawer.class);
-                                            startActivity(i);
-                                            finish();
-
-                                        }
-                                    })
-                            .setNegativeButton("No",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
+//                    // set dialog message
+//                    alertDialogBuilder
+//                            .setMessage("Are you sure you want to add this event?")
+//                            .setCancelable(true)
+//                            .setPositiveButton("Yes",
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int id) {
+//                                            // get user input and set it to result
+//                                            // edit text
+//
+//
+//                                            Intent i = new Intent(AddEvent.this, NavDrawer.class);
+//                                            startActivity(i);
+//                                            finish();
+//
+//                                        }
+//                                    })
+//                            .setNegativeButton("No",
+//                                    new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int id) {
+//                                            dialog.cancel();
+//                                        }
+//                                    });
+//
+//                    // create alert dialog
+//                    AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                    // show it
+//                    alertDialog.show();
                 }
 
             }
@@ -337,14 +349,22 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
 
                     month = monthOfYear;
                     day = dayOfMonth;
+                    dateEvent.setMonth(month);
+                    dateEvent.setYear(dateyear);
+                    dateEvent.setDate(day);
 
-//                    dateEvent.setMonth(monthOfYear);
-//                    dateEvent.setYear(year);
-//                    dateEvent.setDate(dayOfMonth);
+                    Calendar n = Calendar.getInstance();
+                    n.set(year,monthOfYear,dayOfMonth);
+                    long temp = n.getTimeInMillis();
+                    dateInMil = temp;
+
+
+//
                     if(newCalendar.get(Calendar.YEAR) > dateyear || newCalendar.get(java.util.Calendar.YEAR) == dateyear && newCalendar.get(java.util.Calendar.MONTH) > month || newCalendar.get(java.util.Calendar.YEAR) == dateyear && newCalendar.get(java.util.Calendar.MONTH) == month &&  newCalendar.get(java.util.Calendar.DAY_OF_MONTH) > day){
                         datecorrect = false;
                         Toast.makeText(getBaseContext(), "Date is invalid! Please enter valid date.", Toast.LENGTH_LONG).show();
                     } else {
+
                         datecorrect = true;
                     }
 
@@ -354,6 +374,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                 }
 
             },newCalendar.get(java.util.Calendar.YEAR), newCalendar.get(java.util.Calendar.MONTH), newCalendar.get(java.util.Calendar.DAY_OF_MONTH));
+
         } while (!datecorrect);
 
 
@@ -376,7 +397,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                     if (timecorrect){
                         newDate.set(dateyear, month, day, hour, timeminute);
 
-                        dateEvent = new Date(dateyear,month ,day);
+
                         Time t = new Time(hourOfDay,minute,0);
                         dateEvent.setTime(t.getTime());
 
