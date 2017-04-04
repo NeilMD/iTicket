@@ -34,12 +34,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -266,9 +262,9 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
                         @Override
                         public void onSuccess(AuthResult authResult) {
 
-                            Account n = new Account(fullname.getText().toString() ,mEmailView.getText().toString());
-                            String key = ref.push().getKey();
-                            ref.child(key).setValue(n).addOnFailureListener(new OnFailureListener() {
+                            Account n = new Account(fullname.getText().toString() ,mEmailView.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                            ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(n).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     showProgress(false);

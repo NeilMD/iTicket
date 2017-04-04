@@ -29,7 +29,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:foregroundGravity="center"
-            android:src="@drawable/iticket" />
+            android:src="@drawable/iticket_v2" />
     </LinearLayout>
 
 

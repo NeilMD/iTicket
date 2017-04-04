@@ -44,7 +44,7 @@ public class ViewEventDetails extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        EventParcelable ep = getIntent().getParcelableExtra("event");
 
         eventDetails = new EventDetails();
         viewAttendees = new ViewAttendees();

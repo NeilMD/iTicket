@@ -61,6 +61,7 @@ public class ViewEvents extends Fragment {
         data.add("Mama");
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
         if(rvEvents != null) {
             viewEventAdapter = new ViewEventAdapter(data,ref);
 
@@ -68,6 +69,7 @@ public class ViewEvents extends Fragment {
                 @Override
                 public void onItemClick(Event event, String eventId) {
                     Intent i = new Intent(navDrawer, ViewEventDetails.class);
+                    i.putExtra("event",new EventParcelable(event));
                     startActivity(i);
                 }
             });
@@ -133,6 +135,7 @@ public class ViewEvents extends Fragment {
                 @Override
                 public void onItemClick(Event event, String eventId) {
                     Intent i = new Intent(navDrawer, ViewEventDetails.class);
+                    i.putExtra("event",new EventParcelable(event));
                     startActivity(i);
                 }
             });

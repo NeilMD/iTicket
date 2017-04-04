@@ -33,7 +33,7 @@
 
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:src="@drawable/iticket"
+                android:src="@drawable/iticket_v2"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
                 />
 

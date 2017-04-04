@@ -56,7 +56,9 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
     boolean dateset;
     SimpleDateFormat simpleDateFormat;
     Activity thisactivity;
+    private  Event ee;
 
+    String key;
     private long dateInMil;
 
 
@@ -82,7 +84,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
         yes = (CheckBox) findViewById(R.id.yes);
         no = (CheckBox) findViewById(R.id.no);
 
-        simpleDateFormat = new SimpleDateFormat("EEE, MMMMMMMM dd, yyyy ' at ' HH:mm", Locale.ENGLISH);
+        simpleDateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy ' at ' HH:mm", Locale.ENGLISH);
         datetime = (EditText) findViewById(R.id.ad_datetime_value);
 
         datetime.setInputType(InputType.TYPE_NULL);
@@ -267,11 +269,12 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                     ContextThemeWrapper ctw = new ContextThemeWrapper(AddEvent.this, R.style.AlertDialogCustom);
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
                     //TODO: make event here. FIX
+
                     auth = FirebaseAuth.getInstance();
                     ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(auth.getCurrentUser().getUid());
 
-                    Event ee = new Event("aaaaa",ename,eabout, dateInMil ,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
-                    String key = ref.push().getKey();
+                     ee = new Event("aaaaa",ename,eabout, dateInMil ,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
+                     key = ref.push().getKey();
                     ref.child(key).setValue(ee).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -282,11 +285,21 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
 
+                            DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("event").child(ee.getCode());
+                            ref2.setValue(ee).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getBaseContext(),"Failed: "+ e,Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         }
                     });
-                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference().child("event-code").child(ee.getCode());
-                    ref.child("owneruid").setValue(auth.getCurrentUser().getUid());
-                    ref.child("event").setValue(key);
 
                     Intent i = new Intent(AddEvent.this, NavDrawer.class);
                     startActivity(i);

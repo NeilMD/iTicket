@@ -106,8 +106,7 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
         Date n = new Date(te.getDate());
         Time n2 = new Time(te.getTime());
 
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMMMMMMM dd, yyyy ' at '", Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy ' at '", Locale.ENGLISH);
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(" HH:mm", Locale.ENGLISH);
         holder.v.setTag(position);
         holder.v.setOnClickListener(new View.OnClickListener() {

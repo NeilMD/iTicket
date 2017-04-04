@@ -5,11 +5,14 @@ package com.example.julia.wirtec_iticket;
  */
 
 public class Account {
-    private String name, email;
+    private String name, email,uid;
 
-    public Account(String name, String email) {
+
+
+    public Account(String name, String email, String uid) {
         this.name = name;
         this.email = email;
+        this.uid = uid;
     }
 
     public Account() {
@@ -29,5 +32,12 @@ public class Account {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
