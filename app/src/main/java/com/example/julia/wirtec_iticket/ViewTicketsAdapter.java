@@ -16,7 +16,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import java.security.SecureRandom;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Julia on 1/26/2017.
@@ -115,7 +119,12 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         holder.event.setText(currE.getEventname());
         holder.event.setTypeface(null, Typeface.BOLD);
         holder.place.setText(currE.getPlace());
-        holder.datetime.setText(currE.getPlace() + ", "+ currE.getTime() );
+        Date n = new Date(currE.getDate());
+        Time n2 = new Time(currE.getTime());
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy ' at '", Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(" HH:mm", Locale.ENGLISH);
+        holder.datetime.setText(simpleDateFormat.format(n) + simpleDateFormat2.format(n2));
         holder.numtickets.setText(currE.getEventname() + "");
         holder.status.setText("Sta");
         holder.status.setTypeface(null, Typeface.BOLD);

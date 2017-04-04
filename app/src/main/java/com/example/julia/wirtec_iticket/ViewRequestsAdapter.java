@@ -105,12 +105,13 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
     //change content of TextView to current data
     public void onBindViewHolder(ViewRequestsViewHolder holder, int position) {
         String curr = data.get(position);
+        Request req = e.get(position);
         //set image
-        holder.name.setText(curr);
+        holder.name.setText(req.getName());
         holder.name.setTypeface(null, Typeface.BOLD);
-        holder.event.setText(curr);
-        holder.email.setText(curr);
-        holder.numtickets.setText(curr);
+        holder.event.setText(req.getEvent());
+        holder.email.setText(req.getEmail());
+        holder.numtickets.setText(req.getNumberOfTicketRequested());
 
 
         holder.accept.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +200,8 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         TextView textView = (TextView) holder.itemView;
-        textView.setText(String.valueOf(getItem(position).charAt(0)));
+        Request req = e.get(position);
+        textView.setText(req.getEvent());
         holder.itemView.setBackgroundColor(parent.getResources().getColor(R.color.headers));
     }
 
@@ -214,7 +216,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
     @Override
     //
     public int getItemCount() {
-        return data.size();
+        return e.size();
     }
 
     public class ViewRequestsViewHolder extends RecyclerView.ViewHolder{

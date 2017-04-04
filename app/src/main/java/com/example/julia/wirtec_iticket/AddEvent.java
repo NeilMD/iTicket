@@ -272,8 +272,8 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
 
                     auth = FirebaseAuth.getInstance();
                     ref = FirebaseDatabase.getInstance().getReference().child("user-events").child(auth.getCurrentUser().getUid());
-
-                     ee = new Event("aaaaa",ename,eabout, dateInMil ,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
+                    String ccc =  new CodeGenerator().getSaltString();
+                     ee = new Event(ccc,ename,eabout, dateInMil ,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
                      key = ref.push().getKey();
                     ref.child(key).setValue(ee).addOnFailureListener(new OnFailureListener() {
                         @Override
