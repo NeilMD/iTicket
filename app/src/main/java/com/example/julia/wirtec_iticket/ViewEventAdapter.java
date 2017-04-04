@@ -118,6 +118,16 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
                 }
             }
         });
+        holder.v.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(mOnLongItemEventClickListener != null){
+                    int position = (int) v.getTag();
+                    mOnLongItemEventClickListener.onItemClick(e.get(position),eid.get(position));
+                }
+                return false;
+            }
+        });
 
         holder.datetime.setText(simpleDateFormat.format(n) + simpleDateFormat2.format(n2));
         holder.attendees.setText(te.getChecker());
@@ -137,6 +147,16 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
     }
 
     public interface OnItemEventClickListener{
+        public void onItemClick(Event event, String eventId);
+    }
+
+    private OnLongItemEventClickListener mOnLongItemEventClickListener;
+
+    public void setmOnLongItemEventClickListener(OnLongItemEventClickListener onLongItemEventClickListener){
+        mOnLongItemEventClickListener = onLongItemEventClickListener;
+    }
+
+    public interface OnLongItemEventClickListener{
         public void onItemClick(Event event, String eventId);
     }
 

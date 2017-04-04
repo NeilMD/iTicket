@@ -74,6 +74,15 @@ public class ViewEvents extends Fragment {
                 }
             });
 
+            viewEventAdapter.setmOnLongItemEventClickListener(new ViewEventAdapter.OnLongItemEventClickListener() {
+                @Override
+                public void onItemClick(Event event, String eventId) {
+                    Intent i = new Intent(getContext(), FullscreenEventCheck.class);
+                    i.putExtra("event",new EventParcelable(event));
+                    startActivity(i);
+                }
+            });
+
            layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvEvents.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvEvents.getContext());
@@ -140,7 +149,14 @@ public class ViewEvents extends Fragment {
                 }
             });
 
-
+            viewEventAdapter.setmOnLongItemEventClickListener(new ViewEventAdapter.OnLongItemEventClickListener() {
+                @Override
+                public void onItemClick(Event event, String eventId) {
+                    Intent i = new Intent(getContext(), FullscreenEventCheck.class);
+                    i.putExtra("event",new EventParcelable(event));
+                    startActivity(i);
+                }
+            });
 
             rvEvents.setAdapter(viewEventAdapter);
             swipeContainer.setRefreshing(false);

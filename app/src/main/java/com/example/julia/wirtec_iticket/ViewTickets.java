@@ -82,6 +82,13 @@ public class ViewTickets extends Fragment {
                     startActivity(i);
                 }
             });
+            viewTicketsAdapter.setmOnLongItemClickListener(new ViewTicketsAdapter.OnLongItemClickListener() {
+                @Override
+                public void onLongItemClick(Ticket ticket, String ticketId) {
+                    Intent i = new Intent(getContext(), FullscreenTicketCheck.class);
+                    startActivity(i);
+                }
+            });
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvTickets.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvTickets.getContext());
@@ -149,6 +156,13 @@ public class ViewTickets extends Fragment {
                     Intent i = new Intent(navDrawer, ViewTicketDetails.class);
 
 //                    i.putExtra("ticket")
+                    startActivity(i);
+                }
+            });
+            viewTicketsAdapter.setmOnLongItemClickListener(new ViewTicketsAdapter.OnLongItemClickListener() {
+                @Override
+                public void onLongItemClick(Ticket ticket, String ticketId) {
+                    Intent i = new Intent(getContext(), FullscreenTicketCheck.class);
                     startActivity(i);
                 }
             });

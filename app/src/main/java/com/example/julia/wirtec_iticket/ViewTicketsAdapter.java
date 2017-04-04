@@ -138,6 +138,16 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
                 }
             }
         });
+        holder.con.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(mOnLongItemClickListener != null){
+                    int position = (int) v.getTag();
+                    mOnLongItemClickListener.onLongItemClick(e.get(position),eid.get(position));
+                }
+                return false;
+            }
+        });
 
         /**set text background accdg to status
          <WHITE = UNUSED>
@@ -158,6 +168,16 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
 
     public interface OnItemClickListener{
         public void onItemClick(Ticket ticket, String ticketId);
+    }
+
+    private OnLongItemClickListener mOnLongItemClickListener;
+
+    public void setmOnLongItemClickListener(OnLongItemClickListener onLongItemClickListener){
+        mOnLongItemClickListener = onLongItemClickListener;
+    }
+
+    public interface OnLongItemClickListener{
+        public void onLongItemClick(Ticket ticket, String ticketId);
     }
 
     public class ViewTicketsViewHolder extends RecyclerView.ViewHolder {
