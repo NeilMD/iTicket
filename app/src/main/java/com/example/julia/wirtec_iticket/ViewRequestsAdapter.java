@@ -34,12 +34,14 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
     private ArrayList<Request> e = new ArrayList<>();
     private ArrayList<String> eid = new ArrayList<>();
 
-    private ArrayList<String> data;
+    private ArrayList<String> data = new ArrayList<>();
     ViewGroup parent;
 
-    public ViewRequestsAdapter(ArrayList <String> data, DatabaseReference ref){
+    public ViewRequestsAdapter(final ArrayList <String> data, DatabaseReference ref){
         this.ref = ref;
-        this.data = data;
+//        this.data=data;
+
+
         ChildEventListener cel2 = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -47,7 +49,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
                 eid.add(dataSnapshot.getKey());
                 e.add(eve);
-
+//                data.add(dataSnapshot.getKey());
                 notifyItemInserted(e.size() - 1);
             }
 
@@ -85,6 +87,8 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
             }
         };
+
+        this.data = eid;
         ref.addChildEventListener(cel2);
         cel = cel2;
 
@@ -107,6 +111,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         String curr = data.get(position);
         Request req = e.get(position);
         //set image
+        
         holder.name.setText(req.getName());
         holder.name.setTypeface(null, Typeface.BOLD);
         holder.event.setText(req.getEvent());
