@@ -64,7 +64,7 @@ public class ViewRequests extends Fragment {
         if(rvRequests != null) {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
-            viewRequestsAdapter.addAll(data);
+            viewRequestsAdapter.addAll(viewRequestsAdapter.geteid());
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvRequests.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvRequests.getContext());

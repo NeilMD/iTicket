@@ -188,6 +188,9 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             }
         });
     }
+    public ArrayList<String> geteid(){
+        return eid;
+    }
 
     @Override
     public long getHeaderId(int position) {
