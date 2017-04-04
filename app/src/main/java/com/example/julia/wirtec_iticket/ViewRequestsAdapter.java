@@ -36,45 +36,81 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
     private ArrayList<String> data = new ArrayList<>();
     ViewGroup parent;
+    DataSnapshot ds;
+    String key,us;
 
     public ViewRequestsAdapter(final ArrayList <String> data, DatabaseReference ref){
         this.ref = ref;
-//        this.data=data;
+        this.data=data;
 
 
         ChildEventListener cel2 = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Request eve = dataSnapshot.getValue(Request.class);
-
-                eid.add(dataSnapshot.getKey());
-                e.add(eve);
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+//                    for(DataSnapshot snapshot2:snapshot.getChildren()){
+                        Request eve = snapshot.getValue(Request.class);
+                        ds = snapshot;
+                        eid.add(snapshot.getKey());
+                        e.add(eve);
 //                data.add(dataSnapshot.getKey());
-                notifyItemInserted(e.size() - 1);
+                        notifyItemInserted(e.size() - 1);
+//                    }
+                }
+                String eventCode = dataSnapshot.getKey();
+                String userUid = dataSnapshot.child(eventCode).getKey();
+                key = eventCode;
+                us = userUid;
+//                Request eve = dataSnapshot.getValue(Request.class);
+//                ds = dataSnapshot;
+//                eid.add(dataSnapshot.getKey());
+//                e.add(eve);
+////                data.add(dataSnapshot.getKey());
+//                notifyItemInserted(e.size() - 1);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Request ne = dataSnapshot.getValue(Request.class);
-                String neid = dataSnapshot.getKey();
-
-                int idx = eid.indexOf(neid);
-                if(idx > -1 ){
-                    e.set(idx,ne);
-                    notifyItemChanged(idx);
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+//                    for(DataSnapshot snapshot2:snapshot.getChildren()){
+                        Request eve = snapshot.getValue(Request.class);
+                        ds = snapshot;
+                        eid.add(snapshot.getKey());
+                        e.add(eve);
+//                data.add(dataSnapshot.getKey());
+                        notifyItemInserted(e.size() - 1);
+//                    }
                 }
+//                Request ne = dataSnapshot.getValue(Request.class);
+//                String neid = dataSnapshot.getKey();
+//
+//                int idx = eid.indexOf(neid);
+//                if(idx > -1 ){
+//                    e.set(idx,ne);
+//                    notifyItemChanged(idx);
+//                }
 
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String eke = dataSnapshot.getKey();
-                int index = eid.indexOf(eke);
-                if(index > -1){
-                    eid.remove(index);
-                    e.remove(index);
-                    notifyItemRemoved(index);
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+//                    for(DataSnapshot snapshot2:dataSnapshot.getChildren()){
+                        Request eve = snapshot.getValue(Request.class);
+                        ds = snapshot;
+                        eid.add(snapshot.getKey());
+                        e.add(eve);
+//                data.add(dataSnapshot.getKey());
+                        notifyItemInserted(e.size() - 1);
+//                    }
                 }
+//                String eke = dataSnapshot.getKey();
+//                int index = eid.indexOf(eke);
+//                if(index > -1){
+//                    eid.remove(index);
+//                    e.remove(index);
+//                    notifyItemRemoved(index);
+//                }
             }
 
             @Override
@@ -88,7 +124,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             }
         };
 
-        this.data = eid;
+//        this.data = eid;
         ref.addChildEventListener(cel2);
         cel = cel2;
 
@@ -114,7 +150,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         
         holder.name.setText(req.getName());
         holder.name.setTypeface(null, Typeface.BOLD);
-        holder.event.setText(req.getEvent());
+        holder.event.setText(req.getEvent().toString());
         holder.email.setText(req.getEmail());
         holder.numtickets.setText(req.getNumberOfTicketRequested());
 
@@ -194,7 +230,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
     @Override
     public long getHeaderId(int position) {
-        return getItem(position).charAt(0);
+        return eid.get(position).hashCode();
     }
 
     @Override
@@ -210,7 +246,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         TextView textView = (TextView) holder.itemView;
         Request req = e.get(position);
         textView.setText(req.getEvent());
-        holder.itemView.setBackgroundColor(parent.getResources().getColor(R.color.headers));
+//        holder.itemView.setBackgroundColor(parent.getResources().getColor(R.color.headers)); //nagerror
     }
 
 //    private int getRandomColor() {

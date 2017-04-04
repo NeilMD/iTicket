@@ -46,25 +46,25 @@ public class ViewRequests extends Fragment {
 
         navDrawer = (NavDrawer) getActivity();
         data = new ArrayList<String>();
-        data.add("Alpha");
-        data.add("Alfred");
-        data.add("Beta");
-        data.add("Charlie");
-        data.add("Delta");
-        data.add("Echo");
-        data.add("Foxtrot");
-        data.add("Gamma");
-        data.add("Hotel");
-        data.add("India");
-        data.add("Juliet");
-        data.add("Kilo");
-        data.add("Lima");
-        data.add("Mama");
+        data.add("Kimmy");
+        data.add("Kranku");
+        data.add("Keil");
+//        data.add("Charlie");
+//        data.add("Delta");
+//        data.add("Echo");
+//        data.add("Foxtrot");
+//        data.add("Gamma");
+//        data.add("Hotel");
+//        data.add("India");
+//        data.add("Juliet");
+//        data.add("Kilo");
+//        data.add("Lima");
+//        data.add("Mama");
 
         if(rvRequests != null) {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
-            viewRequestsAdapter.addAll(viewRequestsAdapter.geteid());
+            viewRequestsAdapter.addAll(data);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvRequests.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvRequests.getContext());
