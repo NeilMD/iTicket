@@ -4,6 +4,7 @@ package com.example.julia.wirtec_iticket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,10 +35,17 @@ public class ViewRequests extends Fragment {
     }
 
     ViewRequestsAdapter viewRequestsAdapter;
-    ArrayList<String> data;
+    ArrayList<String> data = new ArrayList<>();
     RecyclerView rvRequests;
     SwipeRefreshLayout swipeContainer;
     NavDrawer navDrawer;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,9 +57,9 @@ public class ViewRequests extends Fragment {
 
         navDrawer = (NavDrawer) getActivity();
         data = new ArrayList<String>();
-        data.add("Kimmy");
-        data.add("Kranku");
-        data.add("Keil");
+//        data.add("Kimmy");
+//        data.add("Kranku");
+//        data.add("Keil");
 //        data.add("Charlie");
 //        data.add("Delta");
 //        data.add("Echo");
@@ -60,11 +71,11 @@ public class ViewRequests extends Fragment {
 //        data.add("Kilo");
 //        data.add("Lima");
 //        data.add("Mama");
-
         if(rvRequests != null) {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
-            viewRequestsAdapter.addAll(data);
+//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//            viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
+//            Toast.makeText(getContext(),viewRequestsAdapter.geteid().size()+"",Toast.LENGTH_LONG).show();
+            viewRequestsAdapter.addAll(viewRequestsAdapter.geteid());
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvRequests.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvRequests.getContext());
@@ -139,12 +150,18 @@ public class ViewRequests extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+    }
+
     private void refreshContent(){ new Handler().postDelayed(new Runnable(){
         @Override
         public void run() {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
-            viewRequestsAdapter.addAll(data);
+//            viewRequestsAdapter.addAll(data);
             rvRequests.setAdapter(viewRequestsAdapter);
             swipeContainer.setRefreshing(false);
         }

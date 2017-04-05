@@ -41,7 +41,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
     public ViewRequestsAdapter(final ArrayList <String> data, DatabaseReference ref){
         this.ref = ref;
-        this.data=data;
+
 
 
         ChildEventListener cel2 = new ChildEventListener() {
@@ -51,16 +51,20 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 //                    for(DataSnapshot snapshot2:snapshot.getChildren()){
                         Request eve = snapshot.getValue(Request.class);
                         ds = snapshot;
-                        eid.add(snapshot.getKey());
+
+                        eid.add(dataSnapshot.getKey());
                         e.add(eve);
+                    add(snapshot.getKey());
+
+
 //                data.add(dataSnapshot.getKey());
                         notifyItemInserted(e.size() - 1);
 //                    }
                 }
-                String eventCode = dataSnapshot.getKey();
-                String userUid = dataSnapshot.child(eventCode).getKey();
-                key = eventCode;
-                us = userUid;
+//                String eventCode = dataSnapshot.getKey();
+//                String userUid = dataSnapshot.child(eventCode).getKey();
+//                key = eventCode;
+//                us = userUid;
 //                Request eve = dataSnapshot.getValue(Request.class);
 //                ds = dataSnapshot;
 //                eid.add(dataSnapshot.getKey());
@@ -75,9 +79,11 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 //                    for(DataSnapshot snapshot2:snapshot.getChildren()){
                         Request eve = snapshot.getValue(Request.class);
                         ds = snapshot;
-                        eid.add(snapshot.getKey());
+
+                        eid.add(dataSnapshot.getKey());
+                    add(snapshot.getKey());
                         e.add(eve);
-//                data.add(dataSnapshot.getKey());
+
                         notifyItemInserted(e.size() - 1);
 //                    }
                 }
@@ -98,7 +104,9 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 //                    for(DataSnapshot snapshot2:dataSnapshot.getChildren()){
                         Request eve = snapshot.getValue(Request.class);
                         ds = snapshot;
-                        eid.add(snapshot.getKey());
+
+                        eid.add(dataSnapshot.getKey());
+                    add(snapshot.getKey());
                         e.add(eve);
 //                data.add(dataSnapshot.getKey());
                         notifyItemInserted(e.size() - 1);
@@ -124,10 +132,11 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             }
         };
 
-//        this.data = eid;
+        this.data = eid;
         ref.addChildEventListener(cel2);
+//        addAll(eid);
         cel = cel2;
-
+//        this.data = eid;
     }
 
     @Override
