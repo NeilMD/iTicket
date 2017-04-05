@@ -12,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.julia.wirtec_iticket.DividerItemDecorationCustom;
+import com.example.julia.wirtec_iticket.EventParcelable;
 import com.example.julia.wirtec_iticket.NavDrawer;
 import com.example.julia.wirtec_iticket.R;
 import com.example.julia.wirtec_iticket.ViewAttendeesAdapter;
 import com.example.julia.wirtec_iticket.ViewEventDetails;
 import com.example.julia.wirtec_iticket.ViewTicketsAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -24,11 +28,15 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class ViewAttendees extends Fragment {
-
+    EventParcelable ep;
 
     public ViewAttendees() {
         // Required empty public constructor
     }
+    public void setEvent(EventParcelable ep){
+        this.ep = ep;
+    }
+
 
     ViewAttendeesAdapter viewAttendeesAdapter;
     ArrayList<String> data;
@@ -62,7 +70,8 @@ public class ViewAttendees extends Fragment {
         data.add("Mama");
 
         if(rvAttendees != null) {
-            viewAttendeesAdapter = new ViewAttendeesAdapter(data);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("events-attendees").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ep.getCode());
+            viewAttendeesAdapter = new ViewAttendeesAdapter(data,ref);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvAttendees.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvAttendees.getContext());
@@ -107,7 +116,9 @@ public class ViewAttendees extends Fragment {
     private void refreshContent(){ new Handler().postDelayed(new Runnable(){
         @Override
         public void run() {
-            viewAttendeesAdapter = new ViewAttendeesAdapter(data);
+
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("events-attendees").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ep.getCode());
+            viewAttendeesAdapter = new ViewAttendeesAdapter(data,ref);
             rvAttendees.setAdapter(viewAttendeesAdapter);
             swipeContainer.setRefreshing(false);
         }

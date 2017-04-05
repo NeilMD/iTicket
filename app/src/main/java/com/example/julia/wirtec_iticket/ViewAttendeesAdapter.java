@@ -8,6 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 
 import layout.ViewAttendees;
@@ -19,9 +24,65 @@ import layout.ViewAttendees;
 public class ViewAttendeesAdapter extends RecyclerView.Adapter<ViewAttendeesAdapter.ViewAttendeesViewHolder>{
 
     private ArrayList<String> data;
+    private DatabaseReference ref;
+    private ChildEventListener cel;
 
-    public ViewAttendeesAdapter(ArrayList <String> data){
+    private ArrayList<Account> e = new ArrayList<>();
+    private ArrayList<String> eid = new ArrayList<>();
+
+    public ViewAttendeesAdapter(ArrayList <String> data, DatabaseReference ref){
+
         this.data = data;
+
+        this.ref = ref;
+
+        ChildEventListener cel2 = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Account eve = dataSnapshot.getValue(Account.class);
+
+                eid.add(dataSnapshot.getKey());
+                e.add(eve);
+
+                notifyItemInserted(e.size() - 1);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Account ne = dataSnapshot.getValue(Account.class);
+                String neid = dataSnapshot.getKey();
+
+                int idx = eid.indexOf(neid);
+                if(idx > -1 ){
+                    e.set(idx,ne);
+                    notifyItemChanged(idx);
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                String eke = dataSnapshot.getKey();
+                int index = eid.indexOf(eke);
+                if(index > -1){
+                    eid.remove(index);
+                    e.remove(index);
+                    notifyItemRemoved(index);
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        ref.addChildEventListener(cel2);
+        cel = cel2;
     }
 
     @Override
@@ -38,18 +99,19 @@ public class ViewAttendeesAdapter extends RecyclerView.Adapter<ViewAttendeesAdap
     //change content of TextView to current data
     public void onBindViewHolder(ViewAttendeesAdapter.ViewAttendeesViewHolder holder, int position) {
         String curr = data.get(position);
+        Account acc = e.get(position);
         //set image here
-        holder.name.setText(curr);
+        holder.name.setText(acc.getName());
         holder.name.setTypeface(null, Typeface.BOLD);
-        holder.email.setText(curr);
-        holder.numTickets.setText(curr);
+        holder.email.setText(acc.getEmail());
+//        holder.numTickets.setText(curr);
 
     }
 
     @Override
     //
     public int getItemCount() {
-        return data.size();
+        return e.size();
     }
 
     public class ViewAttendeesViewHolder extends RecyclerView.ViewHolder{

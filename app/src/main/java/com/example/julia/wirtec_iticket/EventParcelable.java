@@ -23,6 +23,7 @@ public class EventParcelable implements Parcelable {
     public EventParcelable( Event e) {
 
         setTime(e.getTime());
+        setPlace(e.getPlace());
         setChecker(e.getChecker());
         setCode(e.getCode());
         setChecker(e.getChecker());

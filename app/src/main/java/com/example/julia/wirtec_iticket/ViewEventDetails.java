@@ -47,11 +47,15 @@ public class ViewEventDetails extends AppCompatActivity {
         EventParcelable ep = getIntent().getParcelableExtra("event");
 
         eventDetails = new EventDetails();
+        eventDetails.setEvent(ep);
         viewAttendees = new ViewAttendees();
+        viewAttendees.setEvent(ep);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragments(eventDetails, "Event Details");;
+        viewPagerAdapter.addFragments(eventDetails, "Event Details");
+
         viewPagerAdapter.addFragments(viewAttendees, "View Attendees");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
