@@ -91,8 +91,8 @@ public class ViewTickets extends Fragment {
             });
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvTickets.setLayoutManager(layoutManager);
-            DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvTickets.getContext());
-            rvTickets.addItemDecoration(dividerItemDecoration);
+            /*DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvTickets.getContext());
+            rvTickets.addItemDecoration(dividerItemDecoration);*/
             rvTickets.setAdapter(viewTicketsAdapter);
         }
 

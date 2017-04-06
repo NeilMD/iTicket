@@ -78,8 +78,8 @@ public class ViewRequests extends Fragment {
             viewRequestsAdapter.addAll(viewRequestsAdapter.geteid());
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvRequests.setLayoutManager(layoutManager);
-            DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvRequests.getContext());
-            rvRequests.addItemDecoration(dividerItemDecoration);
+            /*DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvRequests.getContext());
+            rvRequests.addItemDecoration(dividerItemDecoration);*/
             final StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(viewRequestsAdapter);
             rvRequests.addItemDecoration(headersDecor);
             rvRequests.setAdapter(viewRequestsAdapter);

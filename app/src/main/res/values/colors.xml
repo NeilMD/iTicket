@@ -13,4 +13,5 @@
     <color name="colorAccent">#c8e6c9</color>
     <color name="white_overlay">#66ffffff</color>
     <color name="black_overlay">#66000000</color>
+    <color name="red">#FF1744</color>
 </resources>

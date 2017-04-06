@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -159,7 +160,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         
         holder.name.setText(req.getName());
         holder.name.setTypeface(null, Typeface.BOLD);
-        holder.event.setText(req.getEvent().toString());
+        /*holder.event.setText(req.getEvent().toString());*/
         holder.email.setText(req.getEmail());
         holder.numtickets.setText(req.getNumberOfTicketRequested());
 
@@ -274,23 +275,23 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
     public class ViewRequestsViewHolder extends RecyclerView.ViewHolder{
         dev.dworks.libs.astickyheader.ui.SquareImageView requestimage;
-        TextView event;
+        /*TextView event;*/
         TextView name;
         TextView numtickets;
         TextView email;
-        ImageButton accept;
-        ImageButton reject;
+        Button accept;
+        Button reject;
 
         public ViewRequestsViewHolder(View itemView){
             super(itemView);
 
             requestimage = (dev.dworks.libs.astickyheader.ui.SquareImageView) itemView.findViewById(R.id.requestimage);
-            event = (TextView) itemView.findViewById(R.id.requestevent);
+            /*event = (TextView) itemView.findViewById(R.id.requestevent);*/
             name = (TextView) itemView.findViewById(R.id.name);
             numtickets = (TextView) itemView.findViewById(R.id.numtickets);
             email = (TextView) itemView.findViewById(R.id.email);
-            accept = (ImageButton) itemView.findViewById(R.id.accept);
-            reject = (ImageButton) itemView.findViewById(R.id.reject);
+            accept = (Button) itemView.findViewById(R.id.accept);
+            reject = (Button) itemView.findViewById(R.id.reject);
         }
 
 

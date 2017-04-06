@@ -86,8 +86,8 @@ public class ViewEvents extends Fragment {
 
            layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvEvents.setLayoutManager(layoutManager);
-            DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvEvents.getContext());
-            rvEvents.addItemDecoration(dividerItemDecoration);
+            /*DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvEvents.getContext());
+            rvEvents.addItemDecoration(dividerItemDecoration);*/
             rvEvents.setAdapter(viewEventAdapter);
         }
 

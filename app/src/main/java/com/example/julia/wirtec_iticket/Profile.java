@@ -143,8 +143,8 @@ public class Profile extends AppCompatActivity {
             viewProfileAdapter = new ViewProfileAdapter(data);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
             rvProfile.setLayoutManager(layoutManager);
-            DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvProfile.getContext());
-            rvProfile.addItemDecoration(dividerItemDecoration);
+            /*DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvProfile.getContext());
+            rvProfile.addItemDecoration(dividerItemDecoration);*/
             rvProfile.setAdapter(viewProfileAdapter);
 
             final LinearLayoutManager mLinearLayoutManager = (LinearLayoutManager) rvProfile.getLayoutManager();
