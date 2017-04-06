@@ -3,6 +3,7 @@ package com.example.julia.wirtec_iticket;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +16,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -35,11 +41,11 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
     private ArrayList<Request> e = new ArrayList<>();
     private ArrayList<String> eid = new ArrayList<>();
 
-    private ArrayList<String> data = new ArrayList<>();
+    private ArrayList<String> uid = new ArrayList<>();
     ViewGroup parent;
     DataSnapshot ds;
-    String key,us;
-
+    String us;
+    int key;
     public ViewRequestsAdapter(final ArrayList <String> data, DatabaseReference ref){
         this.ref = ref;
 
@@ -48,18 +54,22 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         ChildEventListener cel2 = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                ds = dataSnapshot;
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
 //                    for(DataSnapshot snapshot2:snapshot.getChildren()){
                         Request eve = snapshot.getValue(Request.class);
-                        ds = snapshot;
+
 
                         eid.add(dataSnapshot.getKey());
                         e.add(eve);
-                    add(snapshot.getKey());
-
-
+                        add(snapshot.getKey());
+                        uid.add(eve.getUid());
+                        int ccc = eid.indexOf(dataSnapshot.getKey());
+                    key = ccc;
+                    us = snapshot.getKey();
+                    notifyItemInserted(ccc);
 //                data.add(dataSnapshot.getKey());
-                        notifyItemInserted(e.size() - 1);
+//                        notifyItemInserted(e.size() - 1);
 //                    }
                 }
 //                String eventCode = dataSnapshot.getKey();
@@ -76,18 +86,49 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-//                    for(DataSnapshot snapshot2:snapshot.getChildren()){
-                        Request eve = snapshot.getValue(Request.class);
-                        ds = snapshot;
+                Request rTemp;
+                int ctr=0;
 
-                        eid.add(dataSnapshot.getKey());
-                    add(snapshot.getKey());
-                        e.add(eve);
 
-                        notifyItemInserted(e.size() - 1);
+//
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    Request eve = snapshot.getValue(Request.class);
+                    ds = snapshot;
+                    int first = eid.indexOf(dataSnapshot.getKey());
+                    int last = eid.lastIndexOf(dataSnapshot.getKey());
+                    int key = 0;
+                    for(int x = first; x < last + 1; x++){
+                        if(uid.get(x).equals(eve.getUid())){
+                            key = x;
+                        }
+                    }
+
+//                    e.set(key,eve);
+//                    eid.set(key,dataSnapshot.getKey());
+
+
+//                        eid.add(dataSnapshot.getKey());
+//                        add(snapshot.getKey());
+//                        e.add(eve);
+//                    if (!eve.equals(e.get(ctr))) {
+//                        e.set(ctr + 1, eve);
+////                        eid.set(ctr,dataSnapshot.getKey());
+//                        notifyItemChanged(ctr + 1);
+//
 //                    }
-                }
+//                    ctr++;
+                }notify();
+////                    for(DataSnapshot snapshot2:snapshot.getChildren()){
+//                        Request eve = snapshot.getValue(Request.class);
+//                        ds = snapshot;
+//
+//                        eid.add(dataSnapshot.getKey());
+//                    add(snapshot.getKey());
+//                        e.add(eve);
+//
+//                        notifyItemInserted(e.size() - 1);
+////                    }
+
 //                Request ne = dataSnapshot.getValue(Request.class);
 //                String neid = dataSnapshot.getKey();
 //
@@ -101,17 +142,31 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                int ctr = 0;
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-//                    for(DataSnapshot snapshot2:dataSnapshot.getChildren()){
-                        Request eve = snapshot.getValue(Request.class);
-                        ds = snapshot;
 
-                        eid.add(dataSnapshot.getKey());
-                    add(snapshot.getKey());
-                        e.add(eve);
-//                data.add(dataSnapshot.getKey());
-                        notifyItemInserted(e.size() - 1);
-//                    }
+////                    for(DataSnapshot snapshot2:dataSnapshot.getChildren()){
+                    Request eve = snapshot.getValue(Request.class);
+                    ds = snapshot;
+                    String ccc = dataSnapshot.getKey();
+
+//                    int c3 = eid.indexOf(ccc);
+//                    int c4 = uid.indexOf(eve.getUid());
+//                    uid.remove(c4);
+//                    eid.remove(c4);
+//                    e.remove(c4);
+//                    notifyItemRemoved(c4);
+
+//                        eid.add(dataSnapshot.getKey());
+//                    add(snapshot.getKey());
+//                        e.add(eve);
+//
+//                        if(!eve.equals(e.get(ctr))){
+//                            e.remove(ctr-1);
+//                            eid.remove(ctr-1);
+//                            notifyItemRemoved(ctr);
+//                        }
+//                    ctr++;
                 }
 //                String eke = dataSnapshot.getKey();
 //                int index = eid.indexOf(eke);
@@ -133,7 +188,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             }
         };
 
-        this.data = eid;
+//        this.data = eid;
         ref.addChildEventListener(cel2);
 //        addAll(eid);
         cel = cel2;
@@ -153,15 +208,15 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
     @Override
     //change content of TextView to current data
-    public void onBindViewHolder(ViewRequestsViewHolder holder, int position) {
-        String curr = data.get(position);
+    public void onBindViewHolder(ViewRequestsViewHolder holder,final int position) {
+//        String curr = data.get(position);
         Request req = e.get(position);
         //set image
         
-        holder.name.setText(req.getName());
+        holder.name.setText(ds+" >>>>>>"+us+">>>>>>>>>>>>>>>"+uid);
         holder.name.setTypeface(null, Typeface.BOLD);
         /*holder.event.setText(req.getEvent().toString());*/
-        holder.email.setText(req.getEmail());
+        holder.email.setText(req.getEvent());
         holder.numtickets.setText(req.getNumberOfTicketRequested());
 
 
@@ -169,68 +224,60 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             @Override
             public void onClick(View v) {
 
-                ContextThemeWrapper ctw = new ContextThemeWrapper(parent.getContext(), R.style.AlertDialogCustom);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("Are you sure you want to accept this request?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        Toast.makeText(parent.getContext(), "Request Accepted!", Toast.LENGTH_LONG).show();
-                                    }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
             }
         });
+        holder.reject.setTag(req);
+
 
         holder.reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ContextThemeWrapper ctw = new ContextThemeWrapper(parent.getContext(), R.style.AlertDialogCustom);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("Are you sure you want to reject this request?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        Toast.makeText(parent.getContext(), "Request Denied!", Toast.LENGTH_LONG).show();
+                final View v2 = v;
+                Request req = (Request) v.getTag();
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(eid.get(position)).child(req.getUid());
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(eid.get(position));
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(v2.getContext(),"Success!",Toast.LENGTH_LONG).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                                            }
+                                        });
                                     }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        dialog.cancel();
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
                                     }
                                 });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
 
-                // create alert dialog
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                    }
+                });
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
             }
         });
     }

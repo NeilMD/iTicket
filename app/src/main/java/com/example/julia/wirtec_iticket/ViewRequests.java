@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,7 @@ public class ViewRequests extends Fragment {
     RecyclerView rvRequests;
     SwipeRefreshLayout swipeContainer;
     NavDrawer navDrawer;
+    StickyRecyclerHeadersDecoration headersDecor;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +74,7 @@ public class ViewRequests extends Fragment {
 //        data.add("Lima");
 //        data.add("Mama");
         if(rvRequests != null) {
-//            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 //            viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
 //            Toast.makeText(getContext(),viewRequestsAdapter.geteid().size()+"",Toast.LENGTH_LONG).show();
             viewRequestsAdapter.addAll(viewRequestsAdapter.geteid());
@@ -80,7 +82,7 @@ public class ViewRequests extends Fragment {
             rvRequests.setLayoutManager(layoutManager);
             /*DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvRequests.getContext());
             rvRequests.addItemDecoration(dividerItemDecoration);*/
-            final StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(viewRequestsAdapter);
+            headersDecor = new StickyRecyclerHeadersDecoration(viewRequestsAdapter);
             rvRequests.addItemDecoration(headersDecor);
             rvRequests.setAdapter(viewRequestsAdapter);
 
@@ -106,6 +108,18 @@ public class ViewRequests extends Fragment {
                     viewRequestsAdapter.notifyDataSetChanged();
                 }
             }));
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    viewRequestsAdapter.notifyDataSetChanged();
+                    headersDecor.invalidateHeaders();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
             viewRequestsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
@@ -161,8 +175,22 @@ public class ViewRequests extends Fragment {
         public void run() {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
-//            viewRequestsAdapter.addAll(data);
+            viewRequestsAdapter.addAll(data);
+            rvRequests.removeItemDecoration(headersDecor);
+            headersDecor = new StickyRecyclerHeadersDecoration(viewRequestsAdapter);
+
+            rvRequests.addItemDecoration(headersDecor);
+//            rvRequests.setAdapter(viewRequestsAdapter);
             rvRequests.setAdapter(viewRequestsAdapter);
+
+//            viewRequestsAdapter.notifyDataSetChanged();
+            viewRequestsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    headersDecor.invalidateHeaders();
+                    super.onChanged();
+                }
+            });
             swipeContainer.setRefreshing(false);
         }
     }, 1000);

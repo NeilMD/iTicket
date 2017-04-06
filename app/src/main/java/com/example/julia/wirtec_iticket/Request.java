@@ -61,4 +61,17 @@ public class Request {
     public void setNumberOfTicketRequested(String numberOfTicketRequested) {
         this.numberOfTicketRequested = numberOfTicketRequested;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean temp = false;
+        if(obj instanceof Request){
+            Request r = (Request) obj;
+            if(this.uid == r.getUid() && this.name == r.getName() && this.email == r.getEmail() && this.event == r.getEvent() && this.numberOfTicketRequested == r.getNumberOfTicketRequested())
+                return true;
+
+
+        }
+        return temp;
+    }
 }
