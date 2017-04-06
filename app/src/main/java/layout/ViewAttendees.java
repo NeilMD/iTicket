@@ -3,6 +3,7 @@ package layout;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ public class ViewAttendees extends Fragment {
 
     public ViewAttendees() {
         // Required empty public constructor
+
     }
     public void setEvent(EventParcelable ep){
         this.ep = ep;
@@ -53,7 +55,7 @@ public class ViewAttendees extends Fragment {
         rvAttendees = (RecyclerView) view.findViewById(R.id.rv_attendees);
 
         viewEventDetails = (ViewEventDetails) getActivity();
-
+//        viewEventDetails.setTitle();
         data = new ArrayList<String>();
         data.add("Alpha");
         data.add("Beta");

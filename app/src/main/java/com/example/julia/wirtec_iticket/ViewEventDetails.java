@@ -48,6 +48,7 @@ public class ViewEventDetails extends AppCompatActivity {
 
         eventDetails = new EventDetails();
         eventDetails.setEvent(ep);
+        setTitle(ep.getEventname());
         viewAttendees = new ViewAttendees();
         viewAttendees.setEvent(ep);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);

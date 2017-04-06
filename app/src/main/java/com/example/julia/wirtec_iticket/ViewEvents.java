@@ -44,7 +44,8 @@ public class ViewEvents extends Fragment {
 
         rvEvents = (RecyclerView) view.findViewById(R.id.rv_events);
         navDrawer  = (NavDrawer)getActivity();
-
+//        ViewEventDetails viewEventDetails = (ViewEventDetails) getActivity();
+//        viewEventDetails.setTitle(ep.ge);
         data = new ArrayList<String>();
         data.add("Alpha");
         data.add("Beta");
