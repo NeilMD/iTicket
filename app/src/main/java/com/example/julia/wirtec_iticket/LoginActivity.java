@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             mEmailView.setText(username);
             mPasswordView.setText(password);
-
+            
         }
 
 

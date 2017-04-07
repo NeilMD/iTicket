@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,19 +93,31 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
 //
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    // snapshot, event level
+
                     Request eve = snapshot.getValue(Request.class);
                     ds = snapshot;
+                    // find out the range of headers that will be affected given this event id
                     int first = eid.indexOf(dataSnapshot.getKey());
                     int last = eid.lastIndexOf(dataSnapshot.getKey());
-                    int key = 0;
+                    int key = -1;
                     for(int x = first; x < last + 1; x++){
+                        Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
                         if(uid.get(x).equals(eve.getUid())){
                             key = x;
                         }
                     }
+                    if(key == -1){
+                        e.add(first,eve);
+                        eid.add(first,dataSnapshot.getKey());
+                        uid.add(first,eve.getUid());
+                        notifyItemInserted(first);
+                    }else{
+                        e.set(key,eve);
+//                            eid.set(key,dataSnapshot.getKey());
+                        notifyItemChanged(key);
+                    }
 
-//                    e.set(key,eve);
-//                    eid.set(key,dataSnapshot.getKey());
 
 
 //                        eid.add(dataSnapshot.getKey());
@@ -117,7 +130,8 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 //
 //                    }
 //                    ctr++;
-                }notify();
+                }
+
 ////                    for(DataSnapshot snapshot2:snapshot.getChildren()){
 //                        Request eve = snapshot.getValue(Request.class);
 //                        ds = snapshot;
@@ -148,7 +162,23 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 ////                    for(DataSnapshot snapshot2:dataSnapshot.getChildren()){
                     Request eve = snapshot.getValue(Request.class);
                     ds = snapshot;
-                    String ccc = dataSnapshot.getKey();
+                    // find out the range of headers that will be affected given this event id
+                    int first = eid.indexOf(dataSnapshot.getKey());
+                    int last = eid.lastIndexOf(dataSnapshot.getKey());
+                    int key = -1;
+                    for(int x = first; x < last + 1; x++){
+                        Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
+                        if(uid.get(x).equals(eve.getUid())){
+                            key = x;
+                        }
+                    }
+
+                    uid.remove(key);
+                    e.remove(key);
+                    eid.remove(key);
+//                            eid.set(key,dataSnapshot.getKey());
+                    Log.i("Pumunta dito",key+"");
+                    notifyItemRemoved(key);
 
 //                    int c3 = eid.indexOf(ccc);
 //                    int c4 = uid.indexOf(eve.getUid());
@@ -210,13 +240,14 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
     //change content of TextView to current data
     public void onBindViewHolder(ViewRequestsViewHolder holder,final int position) {
 //        String curr = data.get(position);
-        Request req = e.get(position);
+        final Request req = e.get(position);
         //set image
         
-        holder.name.setText(ds+" >>>>>>"+us+">>>>>>>>>>>>>>>"+uid);
+        holder.name.setText(ds+"");
+//        holder.name.setText(req.getName());
         holder.name.setTypeface(null, Typeface.BOLD);
         /*holder.event.setText(req.getEvent().toString());*/
-        holder.email.setText(req.getEvent());
+        holder.email.setText(req.getEmail());
         holder.numtickets.setText(req.getNumberOfTicketRequested());
 
 
@@ -233,7 +264,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             @Override
             public void onClick(View v) {
                 final View v2 = v;
-                Request req = (Request) v.getTag();
+                final Request req = (Request) v.getTag();
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(eid.get(position)).child(req.getUid());
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -241,7 +272,15 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
                         dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(eid.get(position));
+
+//                                for(int x = first; x < last + 1; x++){
+//                                    Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
+//                                    if(uid.get(x).equals(eve.getUid())){
+//                                        key = x;
+//                                    }
+//                                }
+//                                notifyItemRemoved();
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(req.getUid()).child(eid.get(position));
                                 ref.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -287,7 +326,17 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
     @Override
     public long getHeaderId(int position) {
+        //Log.i("header", "position " + position +  "\t" +   eid.get(position).hashCode() + " for header: " + eid.get(position));
+        // Log.i("position", position + "");
         return eid.get(position).hashCode();
+        //return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        //return super.getItemId(position);
+        Log.i("asdas", " " + eid.get(position) + "" +  e.get(position).getUid());
+        return (eid.get(position) +  e.get(position).getUid()).hashCode();
     }
 
     @Override
