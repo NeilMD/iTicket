@@ -65,8 +65,6 @@ public class ViewEventDetails extends AppCompatActivity {
         tabLayout.getTabAt(0).setText("Event Details");
         tabLayout.getTabAt(1).setText("View Attendees");
 
-
-
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.event_floating_action_menu);
         editEvent = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.editevent);
         editEvent.setColorRipple(Color.parseColor("#66efecec"));

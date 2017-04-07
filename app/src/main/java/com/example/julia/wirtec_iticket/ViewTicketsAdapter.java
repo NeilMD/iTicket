@@ -103,12 +103,10 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         return new ViewTicketsAdapter.ViewTicketsViewHolder(v);
     }
 
-
     @Override
     public int getItemCount() {
         return e.size();
     }
-
 
     @Override
     //change content of TextView to current data
@@ -211,7 +209,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
             datetime = (TextView) itemView.findViewById(R.id.datetime);
             numtickets = (TextView) itemView.findViewById(R.id.numtickets);
             status = (ImageView) itemView.findViewById(R.id.status);
-            status_v2 = (ImageView) itemView.findViewById(R.id.status_v2);
+            /*status_v2 = (ImageView) itemView.findViewById(R.id.status_v2);*/
             con = itemView.findViewById(R.id.ticket);
         }
 

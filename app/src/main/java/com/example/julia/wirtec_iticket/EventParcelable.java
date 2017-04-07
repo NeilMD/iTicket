@@ -18,10 +18,9 @@ public class EventParcelable implements Parcelable {
     private String place;
     private String checker;
 
-    public EventParcelable() {
-    }
-    public EventParcelable( Event e) {
+    public EventParcelable() {}
 
+    public EventParcelable( Event e) {
         setTime(e.getTime());
         setPlace(e.getPlace());
         setChecker(e.getChecker());
@@ -32,7 +31,6 @@ public class EventParcelable implements Parcelable {
         setEventname(e.getEventname());
         setLimitToOne(e.getLimitToOne());
         setNumberOfTickets(e.getNumberOfTickets());
-
     }
 
     public EventParcelable(String code, String eventname, String eventdesc, Long date, Long time, Long numberOfTickets, Boolean limitToOne, String place, String checker) {

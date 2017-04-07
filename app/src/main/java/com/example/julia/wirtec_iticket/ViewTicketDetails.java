@@ -15,14 +15,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
+
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import layout.TicketDetails;
 
 public class ViewTicketDetails extends AppCompatActivity {
 
     com.github.clans.fab.FloatingActionButton deleteTicket, attendEvent;
     FloatingActionMenu materialDesignFAM;
+
+    TicketDetails ticketDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +40,22 @@ public class ViewTicketDetails extends AppCompatActivity {
         setContentView(R.layout.activity_view_ticket_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Event Title Here");
+
+        TicketParcelable tp = getIntent().getParcelableExtra("ticket");
+
+        ticketDetails = new TicketDetails();
+        ticketDetails.setTicket(tp);
+        setTitle(tp.getEventname());
+        TextView place = (TextView) findViewById(R.id.td_place_value);
+        TextView datetime = (TextView) findViewById(R.id.td_datetime_value);
+        TextView about = (TextView) findViewById(R.id.td_about_value);
+        place.setText(tp.getPlace());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy ' at '", Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(" HH:mm", Locale.ENGLISH);
+        Date n = new Date(tp.getDate());
+        Time n2 = new Time(tp.getTime());
+        datetime.setText(simpleDateFormat.format(n) + simpleDateFormat2.format(n2));
+        about.setText(tp.getEventdesc());
 
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.ticket_floating_action_menu);
         deleteTicket = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.deleteticket);

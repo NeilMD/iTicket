@@ -20,21 +20,13 @@
         android:layout_margin="10dp"
         card_view:cardElevation="5dp">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:id="@+id/status_v2"
-            />
-
-    <dev.dworks.libs.astickyheader.ui.SquareImageView
-        android:layout_width="65dp"
-        android:layout_height="6dp"
-        android:id="@+id/ticketimage"
-        android:scaleType="centerCrop"
-        android:layout_margin="10dp"
-        android:src="@drawable/ticketsbg"/>
+        <dev.dworks.libs.astickyheader.ui.SquareImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:id="@+id/ticketimage"
+            android:scaleType="centerCrop"
+            android:layout_margin="10dp"
+            android:src="@drawable/ticketsbg"/>
 
         <RelativeLayout
             android:orientation="vertical"

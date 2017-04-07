@@ -69,16 +69,13 @@ public class ViewTickets extends Fragment {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         if(rvTickets != null) {
-
             viewTicketsAdapter = new ViewTicketsAdapter(data,ref);
-
 
             viewTicketsAdapter.setmOnItemClickListener(new ViewTicketsAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Ticket ticket, String ticketId) {
                     Intent i = new Intent(navDrawer, ViewTicketDetails.class);
-
-//                    i.putExtra("ticket")
+                    i.putExtra("ticket", new TicketParcelable(ticket));
                     startActivity(i);
                 }
             });

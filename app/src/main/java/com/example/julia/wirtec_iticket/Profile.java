@@ -65,9 +65,6 @@ public class Profile extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.profile_floating_action_menu);
         editprofile = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.editprofile);
         editprofile.setColorRipple(Color.parseColor("#66efecec"));
