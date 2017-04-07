@@ -166,6 +166,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
                     int first = eid.indexOf(dataSnapshot.getKey());
                     int last = eid.lastIndexOf(dataSnapshot.getKey());
                     int key = -1;
+
                     for(int x = first; x < last + 1; x++){
                         Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
                         if(uid.get(x).equals(eve.getUid())){
@@ -263,59 +264,10 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         holder.reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final View v2 = v;
-                final Request req = (Request) v.getTag();
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(eid.get(position)).child(req.getUid());
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
 
-//                                for(int x = first; x < last + 1; x++){
-//                                    Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
-//                                    if(uid.get(x).equals(eve.getUid())){
-//                                        key = x;
-//                                    }
-//                                }
-//                                notifyItemRemoved();
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(req.getUid()).child(eid.get(position));
-                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(v2.getContext(),"Success!",Toast.LENGTH_LONG).show();
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(v2.getContext(),"Failed!",Toast.LENGTH_LONG).show();
-                    }
-                });
+                if(mOnItemClickListener != null){
+                    mOnItemClickListener.onItemClick(req,eid.get(position));
+                }
 
             }
         });
@@ -363,8 +315,29 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 //    }
 
 
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setmOnItemClickListener(OnItemClickListener onItemClickListener){
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener{
+        public void onItemClick(Request request, String code);
+    }
+
+    private OnLongItemClickListener mOnLongItemClickListener;
+
+    public void setmOnLongItemClickListener(OnLongItemClickListener onLongItemClickListener){
+        mOnLongItemClickListener = onLongItemClickListener;
+    }
+
+    public interface OnLongItemClickListener{
+        public void onLongItemClick(Request request, String code);
+    }
+
+
     @Override
-    //
+
     public int getItemCount() {
         return e.size();
     }

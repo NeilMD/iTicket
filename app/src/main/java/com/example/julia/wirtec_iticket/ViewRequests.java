@@ -4,16 +4,20 @@ package com.example.julia.wirtec_iticket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +50,67 @@ public class ViewRequests extends Fragment {
         super.onCreate(savedInstanceState);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
+        viewRequestsAdapter.setmOnItemClickListener(new ViewRequestsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(final Request request, String code) {
+//                final View v2 = v;
+                Log.i("REJECT",code);
+                  final String code2 = code;
+//                final Request req = (Request) v.getTag();
+//                Log.i("On Click Ng Reject",position+"asd");
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(code).child(request.getUid());
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+//                                for(int x = first; x < last + 1; x++){
+//                                    Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
+//                                    if(uid.get(x).equals(eve.getUid())){
+//                                        key = x;
+//                                    }
+//                                }
+//                                notifyItemRemoved();
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(request.getUid()).child(code2);
+                                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getContext(),"Success!",Toast.LENGTH_LONG).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
 
     }
 
@@ -175,6 +240,67 @@ public class ViewRequests extends Fragment {
         public void run() {
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewRequestsAdapter = new ViewRequestsAdapter(data,ref);
+            viewRequestsAdapter.setmOnItemClickListener(new ViewRequestsAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(final Request request, String code) {
+//                final View v2 = v;
+                    final String code2 = code;
+                final Request req = request;
+                Log.i("REJECT",code);
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(code).child(request.getUid());
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+//                                for(int x = first; x < last + 1; x++){
+//                                    Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
+//                                    if(uid.get(x).equals(eve.getUid())){
+//                                        key = x;
+//                                    }
+//                                }
+//                                notifyItemRemoved();
+                                    Log.i("REJECT1",code2);
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(req.getUid()).child(code2);
+                                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(getContext(),"Success!",Toast.LENGTH_LONG).show();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
             viewRequestsAdapter.addAll(data);
             rvRequests.removeItemDecoration(headersDecor);
             headersDecor = new StickyRecyclerHeadersDecoration(viewRequestsAdapter);
