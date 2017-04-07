@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -74,6 +75,24 @@ public class Profile extends AppCompatActivity {
         logout.setColorRipple(Color.parseColor("#66efecec"));
         logout.setColorPressedResId(R.color.colorPrimary);
         logout.setColorNormalResId(R.color.colorPrimaryDark);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Account a = dataSnapshot.getValue(Account.class);
+                TextView email = (TextView) findViewById(R.id.pd_email_value);
+                TextView name = (TextView) findViewById(R.id.pd_contactnum_value);
+                email.setText(a.getEmail());
+                name.setText(a.getName());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        /*TextView*/
 
 
         logout.setOnClickListener(new View.OnClickListener() {
