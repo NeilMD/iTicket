@@ -110,7 +110,7 @@ public class EventsAttended extends Fragment {
         @Override
         public void run() {
 
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("events-attendees").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ep.getCode());
+            //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("events-attendees").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ep.getCode());
             viewProfileAdapter = new ViewProfileAdapter(data);
             rvAttended.setAdapter(viewProfileAdapter);
             swipeContainer.setRefreshing(false);

@@ -150,17 +150,15 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         /**set text background accdg to status
          <GREY = UNUSED>
          <GREEN = USED>
-<<<<<<< HEAD
          <YELLOW = NO EXIT>
          <RED = EXPIRED/REQUEST DENIED>**/
        // holder.status.setBackgroundColor(Color.WHITE);
-        if(currE.getStatus().equalsIgnoreCase("approved")) {
-=======
-         <YELLOW = PENDING>
+        //if(currE.getStatus().equalsIgnoreCase("approved")) {
+         /*<YELLOW = PENDING>
          <RED = EXIT>**/
         /*holder.status.setBackgroundColor(Color.WHITE);*/
         if(currE.getStatus().equalsIgnoreCase("unused")) {
->>>>>>> origin/master
+
             holder.status.setImageResource(R.drawable.approved);
         }
         else if(currE.getStatus().equalsIgnoreCase("pending")) {

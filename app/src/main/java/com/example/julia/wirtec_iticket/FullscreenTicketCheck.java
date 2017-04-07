@@ -152,13 +152,13 @@ public class FullscreenTicketCheck extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // edit text
-<<<<<<< HEAD
+
                                         Intent i = new Intent(FullscreenTicketCheck.this, NavDrawer.class);
                                         startActivity(i);
-=======
+
 //                                        Intent i = new Intent(FullscreenTicketCheck.this, ViewTicketDetails.class);
 //                                        startActivity(i);
->>>>>>> origin/master
+
                                         finish();
                                     }
                                 })

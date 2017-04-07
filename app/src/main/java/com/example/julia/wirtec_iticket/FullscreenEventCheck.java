@@ -150,13 +150,13 @@ public class FullscreenEventCheck extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // edit text
-<<<<<<< HEAD
+
                                         Intent i = new Intent(FullscreenEventCheck.this, NavDrawer.class);
                                         startActivity(i);
-=======
+
 //                                        Intent i = new Intent(FullscreenEventCheck.this, ViewEventDetails.class);
 //                                        startActivity(i);
->>>>>>> origin/master
+
                                         finish();
                                     }
                                 })
