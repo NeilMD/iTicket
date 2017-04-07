@@ -111,6 +111,56 @@ public class ViewRequests extends Fragment {
                 });
             }
         });
+        viewRequestsAdapter.setmOnLongItemClickListener(new ViewRequestsAdapter.OnLongItemClickListener() {
+            @Override
+            public void onLongItemClick(final Request request, String code) {
+                final String code2 = code;
+//                final Request req = (Request) v.getTag();
+//                Log.i("On Click Ng Reject",position+"asd");
+                final Request request1 =request;
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(code).child(request.getUid());
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+//                                for(int x = first; x < last + 1; x++){
+//                                    Log.i("adapter", "x is " + x + " eve uid is " + eve.getUid() + " uid x is " + uid.get(x) );
+//                                    if(uid.get(x).equals(eve.getUid())){
+//                                        key = x;
+//                                    }
+//                                }
+//                                notifyItemRemoved();
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(request1.getUid()).child(code2);
+                                ref.child("status").setValue("unused").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(getContext(),"Success!",Toast.LENGTH_LONG).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
 
     }
 

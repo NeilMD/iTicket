@@ -154,7 +154,7 @@ public class NavDrawer extends AppCompatActivity {
                                                             Event c = dataSnapshot.child(userInput.getText().toString()).getValue(Event.class);
 
                                                             Request r = new Request(FirebaseAuth.getInstance().getCurrentUser().getUid(),acc.getName(),acc.getEmail(),c.getEventname(),numberInput.getText().toString());
-                                                            t = new Ticket(userInput.getText().toString(),c.getEventname(),c.getEventdesc(),c.getDate(),c.getTime(),c.getPlace(),"Pending",System.currentTimeMillis()+"",c.getChecker());
+                                                            t = new Ticket(userInput.getText().toString(),c.getEventname(),c.getEventdesc(),c.getDate(),c.getTime(),c.getPlace(),"pending",System.currentTimeMillis()+"",c.getChecker());
                                                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(c.getChecker()).child(c.getCode());
 
                                                             ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(r).addOnSuccessListener(new OnSuccessListener<Void>() {
