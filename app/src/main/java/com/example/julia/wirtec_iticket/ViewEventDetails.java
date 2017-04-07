@@ -136,32 +136,7 @@ public class ViewEventDetails extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events");
-                                ref.addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        
-                                    }
-
-                                    @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                })
+                                
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
