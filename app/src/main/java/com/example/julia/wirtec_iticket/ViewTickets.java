@@ -151,8 +151,7 @@ public class ViewTickets extends Fragment {
                 @Override
                 public void onItemClick(Ticket ticket, String ticketId) {
                     Intent i = new Intent(navDrawer, ViewTicketDetails.class);
-
-//                    i.putExtra("ticket")
+                    i.putExtra("ticket", new TicketParcelable(ticket));
                     startActivity(i);
                 }
             });

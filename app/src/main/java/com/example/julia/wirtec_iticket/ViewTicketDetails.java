@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -50,6 +51,7 @@ public class ViewTicketDetails extends AppCompatActivity {
         tp = getIntent().getParcelableExtra("ticket");
 
         ticketDetails = new TicketDetails();
+        Log.i("TP::",tp+"");
         ticketDetails.setTicket(tp);
         setTitle(tp.getEventname());
         TextView place = (TextView) findViewById(R.id.td_place_value);
