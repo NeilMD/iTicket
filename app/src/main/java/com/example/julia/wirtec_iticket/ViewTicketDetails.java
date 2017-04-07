@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -33,7 +40,7 @@ public class ViewTicketDetails extends AppCompatActivity {
     FloatingActionMenu materialDesignFAM;
 
     TicketDetails ticketDetails;
-
+    TicketParcelable tp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +48,10 @@ public class ViewTicketDetails extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        TicketParcelable tp = getIntent().getParcelableExtra("ticket");
+        tp = getIntent().getParcelableExtra("ticket");
 
         ticketDetails = new TicketDetails();
+        Log.i("TP::",tp+"");
         ticketDetails.setTicket(tp);
         setTitle(tp.getEventname());
         TextView place = (TextView) findViewById(R.id.td_place_value);
@@ -70,68 +78,90 @@ public class ViewTicketDetails extends AppCompatActivity {
         attendEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(ViewTicketDetails.this, R.style.AlertDialogCustom);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("You are now entering Attend Event Mode. This requires your NFC to be enabled. Proceed?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // edit text
-                                        Intent i = new Intent(ViewTicketDetails.this, FullscreenTicketCheck.class);
-                                        startActivity(i);
-                                    }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
+                if (tp.getStatus().equals("pending")){
+                    Toast.makeText(v.getContext(),"Ticket is not yet accepted!", Toast.LENGTH_LONG).show();
+                }else {
+                    Intent i = new Intent(v.getContext(), FullscreenTicketCheck.class);
+                    i.putExtra("ticket", tp);
+                    startActivity(i);
+                }
             }
         });
 
                 deleteTicket.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         //delete ticket
-                        ContextThemeWrapper ctw = new ContextThemeWrapper(ViewTicketDetails.this, R.style.AlertDialogCustom);
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-
-                        // set dialog message
-                        alertDialogBuilder
-                                .setMessage("Are you sure you want to delete this ticket?")
-                                .setCancelable(true)
-                                .setPositiveButton("Yes",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                // edit text
-                                                Toast.makeText(ViewTicketDetails.this, "Ticket Deleted!", Toast.LENGTH_LONG).show();
-                                                Intent i = new Intent(ViewTicketDetails.this, NavDrawer.class);
-                                                startActivity(i);
-                                                finish();
-                                            }
-                                        })
-                                .setNegativeButton("No",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-                                            }
-                                        });
-
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-
-                        // show it
-                        alertDialog.show();
+//                        ContextThemeWrapper ctw = new ContextThemeWrapper(ViewTicketDetails.this, R.style.AlertDialogCustom);
+//                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//
+//                        // set dialog message
+//                        alertDialogBuilder
+//                                .setMessage("Are you sure you want to delete this ticket?")
+//                                .setCancelable(true)
+//                                .setPositiveButton("Yes",
+//                                        new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int id) {
+//                                                // edit text
+//
+//
+//                                            }
+//                                        })
+//                                .setNegativeButton("No",
+//                                        new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int id) {
+//                                                dialog.cancel();
+//                                            }
+//                                        });
+//
+//                        // create alert dialog
+//                        AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                        // show it
+//                        alertDialog.show();
+                        if(tp.getStatus().equals("pending")) {
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            ref.child(tp.getCode()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(tp.getChecker()).child(tp.getCode());
+                                    ref.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(ViewTicketDetails.this, "Ticket Deleted!", Toast.LENGTH_LONG).show();
+                                            Intent i = new Intent(ViewTicketDetails.this, NavDrawer.class);
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(ViewTicketDetails.this, "Failed", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(ViewTicketDetails.this, "Failed", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }else{
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            ref.child(tp.getCode()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(ViewTicketDetails.this, "Ticket Deleted!", Toast.LENGTH_LONG).show();
+                                    Intent i = new Intent(ViewTicketDetails.this, NavDrawer.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(ViewTicketDetails.this, "Failed", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
                     }
                 });
     }

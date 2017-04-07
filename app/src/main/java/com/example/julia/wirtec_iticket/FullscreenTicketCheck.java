@@ -1,8 +1,17 @@
 package com.example.julia.wirtec_iticket;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.os.Build;
+import android.os.Parcelable;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +25,9 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -93,12 +105,21 @@ public class FullscreenTicketCheck extends AppCompatActivity {
         }
     };
 
+    TicketParcelable tp;
+    String code,uid;
+    String temp;
+    private static final String _MIME_TYPE = "text/plain";
+    NfcAdapter nfc;
+    IntentFilter[] intentFilters;
+    PendingIntent pi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen_ticket_check);
-
+        tp = getIntent().getParcelableExtra("ticket");
+        code = tp.getCode();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls_ticket);
         mContentView = findViewById(R.id.fullscreen_content_ticket);
@@ -131,8 +152,13 @@ public class FullscreenTicketCheck extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // edit text
+<<<<<<< HEAD
                                         Intent i = new Intent(FullscreenTicketCheck.this, NavDrawer.class);
                                         startActivity(i);
+=======
+//                                        Intent i = new Intent(FullscreenTicketCheck.this, ViewTicketDetails.class);
+//                                        startActivity(i);
+>>>>>>> origin/master
                                         finish();
                                     }
                                 })
@@ -162,6 +188,119 @@ public class FullscreenTicketCheck extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button_ticket).setOnTouchListener(mDelayHideTouchListener);
+
+        // NFC Checking
+        PackageManager pm = this.getPackageManager();
+        // Check if NFC is available
+        if(!pm.hasSystemFeature(PackageManager.FEATURE_NFC)){
+            Toast.makeText(this, "The device does not have NFC hardware.",
+                    Toast.LENGTH_LONG).show();
+        }
+        else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN){
+            // Android Beam is not supported
+            Toast.makeText(this, "Android Beam is not supported.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else{
+            nfc = NfcAdapter.getDefaultAdapter(this);
+            if(!nfc.isEnabled()){
+                // NFC is disabled, show the settings UI
+                // to enable NFC
+                Toast.makeText(getBaseContext(),"Please enable NFC", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(Settings.ACTION_NFCSHARING_SETTINGS));
+
+            }
+            pi = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            // IntentFilter to be scanned
+            IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+            try
+            {
+                ndefDetected.addDataType(_MIME_TYPE);
+            } catch (IntentFilter.MalformedMimeTypeException e)
+            {
+
+            }
+            intentFilters = new IntentFilter[] { ndefDetected };
+            // Register callback to set NDEF message
+//            nfc.setNdefPushMessageCallback(this, this);
+            // Register callback to listen for message-sent success
+//            nfc.setOnNdefPushCompleteCallback(this, this);
+        }
+
+
+
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        enableNdefExchangeMode();
+    }
+
+    private void enableNdefExchangeMode() {
+        NdefRecord nfcr = NdefRecord.createTextRecord("en",code+uid);
+        //Send ndefmessage
+        nfc.setNdefPushMessage(
+                new NdefMessage(nfcr),this );
+
+        //Listen to the intentfilter created on the oncreate method
+        nfc.enableForegroundDispatch(this, pi,
+                intentFilters, null);
+    }
+
+    // Fires when the listener of intentfilter has found the same intent filter
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //NDEF exchange mode
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+
+            NdefMessage[] msgs = getNdefMessages(intent);
+            // SEE message. SUCCESS!
+//            Toast.makeText(this, msgs.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+    NdefMessage[] getNdefMessages(Intent intent) {
+        // Parse the intent
+        NdefMessage[] msgs = null;
+
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())
+                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            Parcelable[] rawMsgs =
+
+                    intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMsgs != null) {
+                msgs = new NdefMessage[rawMsgs.length];
+//                for (int i = 0; i < rawMsgs.length; i++) {
+//                    msgs[i] = (NdefMessage) rawMsgs[i];
+//                    Toast.makeText(getBaseContext(),msgs[i].getRecords()[0].getPayload().toString(),Toast.LENGTH_LONG).show();
+//                }
+                // It will get the text+message(see ndefRecord.createtext up)
+                NdefMessage msg = (NdefMessage) rawMsgs[0];
+                byte[] n = msg.getRecords()[0].getPayload();
+                String m = new String(n);
+
+                Toast.makeText(getBaseContext(),m,Toast.LENGTH_LONG).show();
+
+
+            } else {
+                // Unknown tag type
+                byte[] empty = new byte[] {};
+                NdefRecord record =
+                        new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, empty, empty);
+                NdefMessage msg = new NdefMessage(new NdefRecord[] {
+                        record
+                });
+                msgs = new NdefMessage[] {
+                        msg
+                };
+            }
+        } else {
+
+            finish();
+        }
+        return msgs;
     }
 
     @Override

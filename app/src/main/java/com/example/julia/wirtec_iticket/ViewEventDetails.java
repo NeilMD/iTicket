@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import layout.EventDetails;
 import layout.ViewAttendees;
@@ -36,7 +46,7 @@ public class ViewEventDetails extends AppCompatActivity {
     EventDetails eventDetails;
     public FloatingActionMenu materialDesignFAM;
     com.github.clans.fab.FloatingActionButton editEvent, deleteEvent, checkEvent;
-
+    EventParcelable ep;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +54,7 @@ public class ViewEventDetails extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        EventParcelable ep = getIntent().getParcelableExtra("event");
+        ep = getIntent().getParcelableExtra("event");
 
         eventDetails = new EventDetails();
         eventDetails.setEvent(ep);
@@ -113,38 +123,90 @@ public class ViewEventDetails extends AppCompatActivity {
         });
 
 
+
         deleteEvent.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //delete ticket
-                ContextThemeWrapper ctw = new ContextThemeWrapper(ViewEventDetails.this, R.style.AlertDialogCustom);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("eve");
+                ref.child(ep.getCode()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request");
+                        ref.child(ep.getChecker()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events");
+                                ref.addChildEventListener(new ChildEventListener() {
+                                    @Override
+                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                        
+                                    }
 
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("Are you sure you want to delete this event?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // edit text
-                                        Toast.makeText(ViewEventDetails.this, "Event Deleted!", Toast.LENGTH_LONG).show();
-                                        Intent i = new Intent(ViewEventDetails.this, NavDrawer.class);
-                                        startActivity(i);
-                                        finish();
+                                    @Override
+                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
                                     }
                                 })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        dialog.cancel();
-                                    }
-                                });
 
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 
-                // show it
-                alertDialog.show();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+//                //delete ticket
+//                ContextThemeWrapper ctw = new ContextThemeWrapper(ViewEventDetails.this, R.style.AlertDialogCustom);
+//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//
+//                // set dialog message
+//                alertDialogBuilder
+//                        .setMessage("Are you sure you want to delete this event?")
+//                        .setCancelable(true)
+//                        .setPositiveButton("Yes",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog,int id) {
+//                                        // edit text
+//                                        Toast.makeText(ViewEventDetails.this, "Event Deleted!", Toast.LENGTH_LONG).show();
+//                                        Intent i = new Intent(ViewEventDetails.this, NavDrawer.class);
+//                                        startActivity(i);
+//                                        finish();
+//                                    }
+//                                })
+//                        .setNegativeButton("No",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog,int id) {
+//                                        dialog.cancel();
+//                                    }
+//                                });
+//
+//                // create alert dialog
+//                AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                // show it
+//                alertDialog.show();
+                finish();
             }
         });
         editEvent.setOnClickListener(new View.OnClickListener() {

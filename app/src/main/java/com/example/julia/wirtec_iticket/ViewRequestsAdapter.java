@@ -244,17 +244,19 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         final Request req = e.get(position);
         //set image
         
-        holder.name.setText(ds+"");
+        holder.name.setText(req.getName());
 //        holder.name.setText(req.getName());
         holder.name.setTypeface(null, Typeface.BOLD);
         /*holder.event.setText(req.getEvent().toString());*/
         holder.email.setText(req.getEmail());
 
-
+        holder.accept.setTag(req);
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(mOnLongItemClickListener != null){
+                    mOnLongItemClickListener.onLongItemClick(req,eid.get(position));
+                }
             }
         });
         holder.reject.setTag(req);

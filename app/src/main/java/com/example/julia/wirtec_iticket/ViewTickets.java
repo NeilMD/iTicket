@@ -82,8 +82,13 @@ public class ViewTickets extends Fragment {
             viewTicketsAdapter.setmOnLongItemClickListener(new ViewTicketsAdapter.OnLongItemClickListener() {
                 @Override
                 public void onLongItemClick(Ticket ticket, String ticketId) {
-                    Intent i = new Intent(getContext(), FullscreenTicketCheck.class);
-                    startActivity(i);
+                    if (ticket.getStatus().equals("pending")){
+                        Toast.makeText(getContext(),"Ticket is not yet accepted!", Toast.LENGTH_LONG).show();
+                    }else {
+                        Intent i = new Intent(getContext(), FullscreenTicketCheck.class);
+                        i.putExtra("ticket", new TicketParcelable(ticket));
+                        startActivity(i);
+                    }
                 }
             });
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -151,16 +156,20 @@ public class ViewTickets extends Fragment {
                 @Override
                 public void onItemClick(Ticket ticket, String ticketId) {
                     Intent i = new Intent(navDrawer, ViewTicketDetails.class);
-
-//                    i.putExtra("ticket")
+                    i.putExtra("ticket", new TicketParcelable(ticket));
                     startActivity(i);
                 }
             });
             viewTicketsAdapter.setmOnLongItemClickListener(new ViewTicketsAdapter.OnLongItemClickListener() {
                 @Override
                 public void onLongItemClick(Ticket ticket, String ticketId) {
-                    Intent i = new Intent(getContext(), FullscreenTicketCheck.class);
-                    startActivity(i);
+                    if (ticket.getStatus().equals("pending")){
+                        Toast.makeText(getContext(),"Ticket is not yet accepted!", Toast.LENGTH_LONG).show();
+                    }else {
+                        Intent i = new Intent(getContext(), FullscreenTicketCheck.class);
+                        i.putExtra("ticket", new TicketParcelable(ticket));
+                        startActivity(i);
+                    }
                 }
             });
 
