@@ -78,33 +78,13 @@ public class ViewTicketDetails extends AppCompatActivity {
         attendEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(ViewTicketDetails.this, R.style.AlertDialogCustom);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("You are now entering Attend Event Mode. This requires your NFC to be enabled. Proceed?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // edit text
-                                        Intent i = new Intent(ViewTicketDetails.this, FullscreenTicketCheck.class);
-                                        startActivity(i);
-                                    }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
+                if (tp.getStatus().equals("pending")){
+                    Toast.makeText(v.getContext(),"Ticket is not yet accepted!", Toast.LENGTH_LONG).show();
+                }else {
+                    Intent i = new Intent(v.getContext(), FullscreenTicketCheck.class);
+                    i.putExtra("ticket", tp);
+                    startActivity(i);
+                }
             }
         });
 
