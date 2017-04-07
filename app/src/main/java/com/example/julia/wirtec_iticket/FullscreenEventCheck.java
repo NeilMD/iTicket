@@ -129,7 +129,7 @@ public class FullscreenEventCheck extends AppCompatActivity {
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // edit text
-                                        Intent i = new Intent(FullscreenEventCheck.this, ViewEventDetails.class);
+                                        Intent i = new Intent(FullscreenEventCheck.this, NavDrawer.class);
                                         startActivity(i);
                                         finish();
                                     }

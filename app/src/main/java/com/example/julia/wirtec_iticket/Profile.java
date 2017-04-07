@@ -1,24 +1,20 @@
 package com.example.julia.wirtec_iticket;
+import android.support.v4.app.Fragment;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+ import com.example.julia.wirtec_iticket.EventsAttended;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,9 +28,12 @@ import java.util.ArrayList;
 
 public class Profile extends AppCompatActivity {
 
-    ViewProfileAdapter viewProfileAdapter;
+    TabLayout tabLayout;
+    ViewPager viewPager;
+    ViewPagerAdapter viewPagerAdapter;
+    EventsAttended eventsAttended;
+    MainProfile mainProfile;
     ArrayList<String> data;
-    RecyclerView rvProfile;
     public FloatingActionMenu materialDesignFAM;
     com.github.clans.fab.FloatingActionButton editprofile, logout;
     private Account c;
@@ -65,6 +64,27 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        EventParcelable ep = getIntent().getParcelableExtra("event");
+
+        mainProfile = new MainProfile();
+        //mainProfile.setEvent(ep);
+       // setTitle(ep.getEventname());
+        eventsAttended = new EventsAttended();
+      //  viewAttendees.setEvent(ep);
+        tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragments(mainProfile, "Profile Details");
+        viewPagerAdapter.addFragments(eventsAttended, "Events Attended");
+        viewPager.setAdapter(viewPagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabTextColors(Color.WHITE, getResources().getColor(R.color.colorAccent));
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
+        tabLayout.getTabAt(0).setText("Profile Details");
+        tabLayout.getTabAt(1).setText("Events Attended");
+
 
         materialDesignFAM = (FloatingActionMenu) findViewById(R.id.profile_floating_action_menu);
         editprofile = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.editprofile);
@@ -138,45 +158,8 @@ public class Profile extends AppCompatActivity {
         });
 
 
-      rvProfile = (RecyclerView) findViewById(R.id.rv_eventstickets);
 
-        data = new ArrayList<String>();
-        data.add("Alpha");
-        data.add("Beta");
-        data.add("Charlie");
-        data.add("Delta");
-        data.add("Echo");
-        data.add("Foxtrot");
-        data.add("Gamma");
-        data.add("Hotel");
-        data.add("India");
-        data.add("Juliet");
-        data.add("Kilo");
-        data.add("Lima");
-        data.add("Mama");
 
-        if(rvProfile != null) {
-            viewProfileAdapter = new ViewProfileAdapter(data);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false);
-            rvProfile.setLayoutManager(layoutManager);
-            /*DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvProfile.getContext());
-            rvProfile.addItemDecoration(dividerItemDecoration);*/
-            rvProfile.setAdapter(viewProfileAdapter);
-
-            final LinearLayoutManager mLinearLayoutManager = (LinearLayoutManager) rvProfile.getLayoutManager();
-           /** rvProfile.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    if (mLinearLayoutManager.findLastCompletelyVisibleItemPosition() == data.size() - 1) {
-                        materialDesignFAM.setVisibility(View.INVISIBLE);
-                    } else {
-                        materialDesignFAM.setVisibility(View.VISIBLE);
-                    }
-                }
-
-            });**/
-
-        }
 
 
     }

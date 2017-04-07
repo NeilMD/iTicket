@@ -22,12 +22,11 @@ public class Request {
 
     public Request(){}
 
-    public Request(String uid, String name, String email, String event, String numberOfTicketRequested) {
+    public Request(String uid, String name, String email, String event) {
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.event = event;
-        this.numberOfTicketRequested = numberOfTicketRequested;
     }
 
     public String getUid() {
@@ -54,20 +53,13 @@ public class Request {
         this.email = email;
     }
 
-    public String getNumberOfTicketRequested() {
-        return numberOfTicketRequested;
-    }
-
-    public void setNumberOfTicketRequested(String numberOfTicketRequested) {
-        this.numberOfTicketRequested = numberOfTicketRequested;
-    }
 
     @Override
     public boolean equals(Object obj) {
         boolean temp = false;
         if(obj instanceof Request){
             Request r = (Request) obj;
-            if(this.uid == r.getUid() && this.name == r.getName() && this.email == r.getEmail() && this.event == r.getEvent() && this.numberOfTicketRequested == r.getNumberOfTicketRequested())
+            if(this.uid == r.getUid() && this.name == r.getName() && this.email == r.getEmail() && this.event == r.getEvent())
                 return true;
 
 

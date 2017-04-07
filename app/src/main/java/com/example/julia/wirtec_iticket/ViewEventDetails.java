@@ -56,7 +56,6 @@ public class ViewEventDetails extends AppCompatActivity {
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragments(eventDetails, "Event Details");
-
         viewPagerAdapter.addFragments(viewAttendees, "View Attendees");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

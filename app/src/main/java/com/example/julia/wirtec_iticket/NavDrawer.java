@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -54,7 +55,7 @@ public class NavDrawer extends AppCompatActivity {
     public FloatingActionMenu materialDesignFAM;
     FloatingActionButton addticket, addevent;
     AppCompatActivity activity;
-
+    boolean emptyCode, invalidCode;
     private DatabaseReference ref2;
     private Account acc;
     private Ticket t;
@@ -125,10 +126,8 @@ public class NavDrawer extends AppCompatActivity {
                 final EditText userInput = (EditText) promptsView
                         .findViewById(R.id.editTextDialogUserInput);
 
-                final EditText numberInput = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogNumberInput);
+
                 final String cc = userInput.getText().toString();
-                final String numm = numberInput.getText().toString();
                 // set dialog message
                 alertDialogBuilder
                         .setCancelable(false)
@@ -137,63 +136,75 @@ public class NavDrawer extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog,int id) {
                                         // get user input and set it to result
                                         // edit text
-                                        Toast.makeText(activity, "Entered code: " + userInput.getText().toString() + "! \n Number of Tickets Reserved: " + numm, Toast.LENGTH_LONG).show();
-                                        DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                                        ref3.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                acc = dataSnapshot.getValue(Account.class);
-                                                ref2 = FirebaseDatabase.getInstance().getReference().child("event");
-                                                Toast.makeText(getBaseContext(),"Success1!"+userInput.getText(),Toast.LENGTH_LONG).show();
-                                                ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        Toast.makeText(getBaseContext(),"Success!lknlk"+userInput.getText(),Toast.LENGTH_LONG).show();
-                                                        if(dataSnapshot.hasChild(userInput.getText().toString())){
-                                                            Event c = dataSnapshot.child(userInput.getText().toString()).getValue(Event.class);
+                                        emptyCode= false;
+                                        invalidCode = false;
 
-                                                            Request r = new Request(FirebaseAuth.getInstance().getCurrentUser().getUid(),acc.getName(),acc.getEmail(),c.getEventname(),numberInput.getText().toString());
-                                                            t = new Ticket(userInput.getText().toString(),c.getEventname(),c.getEventdesc(),c.getDate(),c.getTime(),c.getPlace(),"Pending",System.currentTimeMillis()+"",c.getChecker());
-                                                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(c.getChecker()).child(c.getCode());
+                                        if (TextUtils.isEmpty(userInput.getText().toString().trim())){
+                                            emptyCode = true;
+                                            Toast.makeText(activity, "Code cannot be empty!", Toast.LENGTH_LONG).show();
+                                        } else {
 
-                                                            ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(r).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(t.getCode());
-                                                                    ref.setValue(t).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                        @Override
-                                                                        public void onSuccess(Void aVoid) {
-                                                                            Toast.makeText(getBaseContext(),"Success!",Toast.LENGTH_LONG).show();
-                                                                        }
-                                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                                        @Override
-                                                                        public void onFailure(@NonNull Exception e) {
-                                                                            Toast.makeText(getBaseContext(),"Failed!"+ e,Toast.LENGTH_LONG).show();
-                                                                        }
-                                                                    });
-                                                                }
-                                                            });
+                                            DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                                            ref3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    acc = dataSnapshot.getValue(Account.class);
+                                                    ref2 = FirebaseDatabase.getInstance().getReference().child("event");
+                                                    Toast.makeText(getBaseContext(), "Success1!" + userInput.getText(), Toast.LENGTH_LONG).show();
+                                                    ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            Toast.makeText(getBaseContext(), "Success!" + userInput.getText(), Toast.LENGTH_LONG).show();
+                                                            if (dataSnapshot.hasChild(userInput.getText().toString())) {
+                                                                Event c = dataSnapshot.child(userInput.getText().toString()).getValue(Event.class);
+
+                                                                Request r = new Request(FirebaseAuth.getInstance().getCurrentUser().getUid(), acc.getName(), acc.getEmail(), c.getEventname());
+                                                                t = new Ticket(userInput.getText().toString(), c.getEventname(), c.getEventdesc(), c.getDate(), c.getTime(), c.getPlace(), "Pending", System.currentTimeMillis() + "", c.getChecker());
+                                                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(c.getChecker()).child(c.getCode());
+
+                                                                ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(r).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(t.getCode());
+                                                                        ref.setValue(t).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+                                                                                Toast.makeText(getBaseContext(), "Success!", Toast.LENGTH_LONG).show();
+                                                                            }
+                                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                Toast.makeText(getBaseContext(), "Failed!" + e, Toast.LENGTH_LONG).show();
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                invalidCode = false;
+                                                            }
+
                                                         }
-                                                    }
 
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
 
-                                                    }
-
-
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-
-                                            }
-                                        });
+                                                        }
 
 
+                                                    });
+                                                }
 
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+                                        if(emptyCode == false && invalidCode == false) {
+                                            Toast.makeText(activity, "Entered code: " + userInput.getText().toString() + "!", Toast.LENGTH_LONG).show();
+                                        }
                                     }
                                 })
                         .setNegativeButton("Cancel",
@@ -206,6 +217,7 @@ public class NavDrawer extends AppCompatActivity {
                 // create alert dialog
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.setCanceledOnTouchOutside(true);
 
                 // show it
                 alertDialog.show();

@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:background="#95e695"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         card_view:cardElevation="5dp"
         android:padding ="15dp">
@@ -102,41 +102,12 @@
 
             </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/numlay"
-            android:gravity="center_horizontal"
-            android:layout_below="@+id/emaillay">
-
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="20dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="4dp"
-            android:id="@+id/numticketsicon"
-            android:tint="@color/colorPrimary"
-            android:src="@drawable/ic_ticket"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="2dp"
-            android:paddingTop="3dp"
-            android:textSize="12sp"
-            android:layout_toRightOf="@+id/numticketsicon"
-            android:textColor="@color/primary_text"
-            android:layout_alignBottom="@+id/numticketsicon"
-
-            android:id="@+id/numtickets"/>
-
-            </RelativeLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/numlay"
+            android:layout_below="@id/emaillay"
             android:orientation="horizontal">
 
             <Button

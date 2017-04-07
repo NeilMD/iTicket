@@ -249,7 +249,6 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
         holder.name.setTypeface(null, Typeface.BOLD);
         /*holder.event.setText(req.getEvent().toString());*/
         holder.email.setText(req.getEmail());
-        holder.numtickets.setText(req.getNumberOfTicketRequested());
 
 
         holder.accept.setOnClickListener(new View.OnClickListener() {
@@ -357,7 +356,6 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             requestimage = (dev.dworks.libs.astickyheader.ui.SquareImageView) itemView.findViewById(R.id.requestimage);
             /*event = (TextView) itemView.findViewById(R.id.requestevent);*/
             name = (TextView) itemView.findViewById(R.id.name);
-            numtickets = (TextView) itemView.findViewById(R.id.numtickets);
             email = (TextView) itemView.findViewById(R.id.email);
             accept = (Button) itemView.findViewById(R.id.accept);
             reject = (Button) itemView.findViewById(R.id.reject);

@@ -124,7 +124,6 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy ' at '", Locale.ENGLISH);
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat(" HH:mm", Locale.ENGLISH);
         holder.datetime.setText(simpleDateFormat.format(n) + simpleDateFormat2.format(n2));
-        holder.numtickets.setText(currE.getEventname() + "");
         /*holder.status.setText("Sta");
         holder.status.setTypeface(null, Typeface.BOLD);*/
         holder.con.setTag(position);
@@ -153,7 +152,7 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
          <GREEN = USED>
          <YELLOW = NO EXIT>
          <RED = EXPIRED/REQUEST DENIED>**/
-        /*holder.status.setBackgroundColor(Color.WHITE);*/
+       // holder.status.setBackgroundColor(Color.WHITE);
         if(currE.getStatus().equalsIgnoreCase("approved")) {
             holder.status.setImageResource(R.drawable.approved);
         }
@@ -207,7 +206,6 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
             event = (TextView) itemView.findViewById(R.id.event);
             place = (TextView) itemView.findViewById(R.id.place);
             datetime = (TextView) itemView.findViewById(R.id.datetime);
-            numtickets = (TextView) itemView.findViewById(R.id.numtickets);
             status = (ImageView) itemView.findViewById(R.id.status);
             /*status_v2 = (ImageView) itemView.findViewById(R.id.status_v2);*/
             con = itemView.findViewById(R.id.ticket);

@@ -81,8 +81,6 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
         about = (EditText) findViewById(R.id.ad_about_value);
         ticketlimit = (EditText) findViewById(R.id.ad_numtickets_value);
         price = (EditText) findViewById(R.id.ad_price_value);
-        yes = (CheckBox) findViewById(R.id.yes);
-        no = (CheckBox) findViewById(R.id.no);
 
         simpleDateFormat = new SimpleDateFormat("EEE, MMM dd, yyyy ' at ' HH:mm", Locale.ENGLISH);
         datetime = (EditText) findViewById(R.id.ad_datetime_value);
@@ -164,24 +162,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-        yes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    no.setChecked(false);
-                }
-            }
-        });
-        no.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    yes.setChecked(false);
-                }
-            }
-        });
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.confirmaddevent);
         fab.setOnClickListener(new View.OnClickListener() {

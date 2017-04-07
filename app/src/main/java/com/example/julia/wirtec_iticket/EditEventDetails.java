@@ -135,8 +135,7 @@ public class EditEventDetails extends AppCompatActivity implements View.OnClickL
         about = (EditText) findViewById(R.id.ad_about_value);
         ticketlimit = (EditText) findViewById(R.id.ad_numtickets_value);
         price = (EditText) findViewById(R.id.ad_price_value);
-        yes = (CheckBox) findViewById(R.id.yes);
-        no = (CheckBox) findViewById(R.id.no);
+
 
 
         simpleDateFormat = new SimpleDateFormat("EEE, MMMMMMMM dd, yyyy ' at ' HH:mm", Locale.ENGLISH);
@@ -148,24 +147,6 @@ public class EditEventDetails extends AppCompatActivity implements View.OnClickL
 
         setDateTimeField();
 
-        yes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    no.setChecked(false);
-                }
-            }
-        });
-        no.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    yes.setChecked(false);
-                }
-            }
-        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.confirmeditevent);
         fab.setOnClickListener(new View.OnClickListener() {

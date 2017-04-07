@@ -149,30 +149,6 @@
     </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="25dp"
-        android:paddingLeft="25dp"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:foregroundGravity="center_vertical"
-            android:src="@drawable/ic_group_black_24dp"/>
-
-        <TextView
-            android:id="@+id/ed_one_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:text="" />
-
-    </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"

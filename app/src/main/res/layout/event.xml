@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:background="#95e695"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         card_view:cardElevation="5dp"
         android:padding ="15dp">
@@ -71,9 +71,37 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/placelay"
+            android:id="@+id/codelay"
             android:gravity="center_horizontal"
             android:layout_below="@+id/eventlay">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="20dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="4dp"
+                android:id="@+id/codeicon"
+                android:tint="@color/colorPrimary"
+                android:src="@drawable/ic_confirmation_number_black_24dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:paddingTop="3dp"
+                android:textColor="@color/primary_text"
+                android:layout_toRightOf="@+id/codeicon"
+                android:layout_alignBottom="@+id/codeicon"
+                android:textSize="12sp"
+                android:id="@+id/attendees"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/placelay"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/codelay">
 
         <ImageView
             android:layout_width="35dp"
@@ -125,33 +153,7 @@
             android:id="@+id/eventdatetime"/>
             </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/attendeeslay"
-            android:gravity="center_horizontal"
-            android:layout_below="@+id/datetimelay">
 
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="20dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="4dp"
-            android:id="@+id/attendeesicon"
-            android:tint="@color/colorPrimary"
-            android:src="@drawable/ic_group_black_24dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="2dp"
-            android:paddingTop="3dp"
-            android:textColor="@color/primary_text"
-            android:layout_toRightOf="@+id/attendeesicon"
-            android:layout_alignBottom="@+id/attendeesicon"
-            android:textSize="12sp"
-            android:id="@+id/attendees"/>
-            </RelativeLayout>
 
     </RelativeLayout>
 
