@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +34,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import layout.EventDetails;
 import layout.ViewAttendees;
@@ -127,16 +131,32 @@ public class ViewEventDetails extends AppCompatActivity {
 
         deleteEvent.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("eve");
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event");
                 ref.child(ep.getCode()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request");
-                        ref.child(ep.getChecker()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        ref.child(FirebaseAuth.getInstance().getCurrentUser().getUid()
+                        ).child(ep.getCode()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-events");
-                                
+                                 final ArrayList <String > key =new ArrayList<String>();
+                                ref.child("code").equalTo(ep.getCode()).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                                            key.add(dataSnapshot1.getKey());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
+    //                                finish();
 
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -182,7 +202,7 @@ public class ViewEventDetails extends AppCompatActivity {
 //
 //                // show it
 //                alertDialog.show();
-                finish();
+
             }
         });
         editEvent.setOnClickListener(new View.OnClickListener() {

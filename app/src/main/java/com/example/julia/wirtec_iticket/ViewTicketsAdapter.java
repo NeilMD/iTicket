@@ -161,10 +161,10 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
             holder.status.setImageResource(R.drawable.pending);
         }
         else if(currE.getStatus().equalsIgnoreCase("used")) {
-            holder.status.setImageResource(R.drawable.attended);
+            holder.status.setImageResource(R.drawable.unattended);
         }
         else if(currE.getStatus().equalsIgnoreCase("exit")) {
-            holder.status.setImageResource(R.drawable.unattended);
+            holder.status.setImageResource(R.drawable.approved);
         }
         /*holder.status.setTextColor(Color.BLACK);*/
 

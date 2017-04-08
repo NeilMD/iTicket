@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -29,8 +30,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -139,34 +143,37 @@ public class FullscreenEventCheck extends AppCompatActivity {
         dummy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(FullscreenEventCheck.this, R.style.AlertDialogCustom);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("You are about to exit Check Event Mode. Proceed?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // edit text
-//                                        Intent i = new Intent(FullscreenEventCheck.this, ViewEventDetails.class);
-//                                        startActivity(i);
-                                        finish();
-                                    }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
+//                ContextThemeWrapper ctw = new ContextThemeWrapper(FullscreenEventCheck.this, R.style.AlertDialogCustom);
+//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//
+//                // set dialog message
+//                alertDialogBuilder
+//                        .setMessage("You are about to exit Check Event Mode. Proceed?")
+//                        .setCancelable(true)
+//                        .setPositiveButton("Yes",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        // edit text
+////                                        Intent i = new Intent(FullscreenEventCheck.this, NavDrawer.class);
+////                                        startActivity(i);
+//                                        finish();
+//                                    }
+//                                })
+//                        .setNegativeButton("No",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        dialog.cancel();
+//                                    }
+//                                });
+//
+//                // create alert dialog
+//                AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                // show it
+//                alertDialog.show();
+                Intent i = new Intent(FullscreenEventCheck.this, NavDrawer.class);
+                startActivity(i);
+               finish();
             }
         });
         // Set up the user interaction to manually show or hide the system UI.
@@ -238,6 +245,7 @@ public class FullscreenEventCheck extends AppCompatActivity {
         //Listen to the intentfilter created on the oncreate method
         nfc.enableForegroundDispatch(this, pi,
                 intentFilters, null);
+        //finish();
     }
 
     // Fires when the listener of intentfilter has found the same intent filter
@@ -271,21 +279,12 @@ public class FullscreenEventCheck extends AppCompatActivity {
                 byte[] n = msg.getRecords()[0].getPayload();
                 String m = new String(n);
                 if(m != null){
-                    String rm = m.substring(1);
-                    String code = rm.substring(0,4);
-                    String auth = rm.substring(4);
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-ticket").child(auth).child(code);
-                    ref.child("status").setValue("used").addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(getBaseContext(),"Success!",Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getBaseContext(),"Failed!",Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    String rm = m.substring(3);
+                    final String code = rm.substring(0,5);
+                    final String auth = rm.substring(5);
+                    Log.i("Send Dta:",code+"    AuthID:  "+auth+"  RM:"+rm);
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(auth).child(code);
+//                    ref.child("status").
                     Toast.makeText(getBaseContext(),"Code:"+code+"    Auth:"+auth,Toast.LENGTH_LONG).show();
                 }
 
