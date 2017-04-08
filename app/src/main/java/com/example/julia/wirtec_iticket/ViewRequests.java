@@ -119,7 +119,7 @@ public class ViewRequests extends Fragment {
 //                Log.i("On Click Ng Reject",position+"asd");
                 final Request request1 =request;
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(code).child(request.getUid());
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -298,7 +298,7 @@ public class ViewRequests extends Fragment {
                 final Request req = request;
                 Log.i("REJECT",code);
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(code).child(request.getUid());
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -335,6 +335,7 @@ public class ViewRequests extends Fragment {
                                             Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
                                         }
                                     });
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -361,7 +362,7 @@ public class ViewRequests extends Fragment {
 //                Log.i("On Click Ng Reject",position+"asd");
                     final Request request1 =request;
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-request").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(code).child(request.getUid());
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -380,6 +381,7 @@ public class ViewRequests extends Fragment {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Toast.makeText(getContext(),"Success!",Toast.LENGTH_LONG).show();
+
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
@@ -387,6 +389,7 @@ public class ViewRequests extends Fragment {
                                             Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
                                         }
                                     });
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -401,6 +404,7 @@ public class ViewRequests extends Fragment {
                             Toast.makeText(getContext(),"Failed!",Toast.LENGTH_LONG).show();
                         }
                     });
+
                 }
             });
             viewRequestsAdapter.addAll(data);

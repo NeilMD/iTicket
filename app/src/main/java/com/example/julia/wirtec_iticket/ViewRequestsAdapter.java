@@ -90,7 +90,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
                 Request rTemp;
                 int ctr=0;
 
-
+                Log.i("PUMASOK SA CHANGED:",dataSnapshot+"     s"+s);
 //
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     // snapshot, event level
@@ -107,16 +107,27 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
                             key = x;
                         }
                     }
+                    Log.i("PUMASOK SA CHANGED2:",key+"");
                     if(key == -1){
                         e.add(first,eve);
                         eid.add(first,dataSnapshot.getKey());
                         uid.add(first,eve.getUid());
+//                        notifyItemRemoved(key);
                         notifyItemInserted(first);
+
                     }else{
                         e.set(key,eve);
-//                            eid.set(key,dataSnapshot.getKey());
+////                            eid.set(key,dataSnapshot.getKey());
+//
                         notifyItemChanged(key);
+//                        notifyItemRemoved(key);
+//
+//                        uid.remove(key);
+//                        e.remove(key);
+//                        eid.remove(key);
+//                        notifyItemRemoved(key);
                     }
+
 
 
 
@@ -157,6 +168,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 int ctr = 0;
+                Log.i("TO BE DELETED","Key: "+key+".   DATASNAPSHOT:"+dataSnapshot);
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
 
 ////                    for(DataSnapshot snapshot2:dataSnapshot.getChildren()){
@@ -173,6 +185,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
                             key = x;
                         }
                     }
+
 
                     uid.remove(key);
                     e.remove(key);
@@ -210,7 +223,7 @@ public class ViewRequestsAdapter extends TicketAdapter<ViewRequestsAdapter.ViewR
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                Log.i("MOVED",dataSnapshot+"");
             }
 
             @Override
