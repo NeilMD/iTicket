@@ -155,16 +155,16 @@ public class ViewTicketsAdapter extends RecyclerView.Adapter<ViewTicketsAdapter.
          <RED = EXIT>**/
         /*holder.status.setBackgroundColor(Color.WHITE);*/
         if(currE.getStatus().equalsIgnoreCase("unused")) {
-            holder.status.setImageResource(R.drawable.approved);
+            holder.status.setImageResource(R.drawable.logo_unused);
         }
         else if(currE.getStatus().equalsIgnoreCase("pending")) {
-            holder.status.setImageResource(R.drawable.pending);
+            holder.status.setImageResource(R.drawable.logo_pending);
         }
         else if(currE.getStatus().equalsIgnoreCase("used")) {
-            holder.status.setImageResource(R.drawable.unattended);
+            holder.status.setImageResource(R.drawable.logo_used);
         }
         else if(currE.getStatus().equalsIgnoreCase("exit")) {
-            holder.status.setImageResource(R.drawable.approved);
+            holder.status.setImageResource(R.drawable.logo_exit);
         }
         /*holder.status.setTextColor(Color.BLACK);*/
 
