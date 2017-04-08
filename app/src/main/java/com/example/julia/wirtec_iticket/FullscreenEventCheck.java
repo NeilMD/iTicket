@@ -30,6 +30,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -284,7 +286,88 @@ public class FullscreenEventCheck extends AppCompatActivity {
                     final String auth = rm.substring(5);
                     Log.i("Send Dta:",code+"    AuthID:  "+auth+"  RM:"+rm);
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(auth).child(code);
-//                    ref.child("status").
+
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child("status").getValue().equals("unused")){
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(auth).child(code);
+                                ref.child("status").setValue("used").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(auth);
+                                        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                final Account acc = dataSnapshot.getValue(Account.class);
+                                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-attendees");
+                                                ref.child(ev.getCode()).child(acc.getUid()).setValue(acc).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+
+                                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-attended").child(auth);
+                                                        ref.child(ev.getCode()).setValue(ev).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Toast.makeText(getBaseContext(),acc.getName()+ "has attended"+ ev.getEventname()+"!",Toast.LENGTH_LONG).show();
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+
+                                                            }
+                                                        });
+
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+
+                            }else if(dataSnapshot.child("status").getValue().equals("used")){
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(auth).child(code);
+                                ref.child("status").setValue("exit").addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(getBaseContext(),"Success Entry!",Toast.LENGTH_LONG).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+
+                                    }
+                                });
+
+                            }else{
+                                Toast.makeText(getBaseContext(),"Failed!",Toast.LENGTH_LONG).show();
+
+                            }
+                        }
+
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                     Toast.makeText(getBaseContext(),"Code:"+code+"    Auth:"+auth,Toast.LENGTH_LONG).show();
                 }
 
