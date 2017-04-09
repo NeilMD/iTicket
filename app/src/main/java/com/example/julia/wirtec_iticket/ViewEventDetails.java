@@ -145,7 +145,9 @@ public class ViewEventDetails extends AppCompatActivity {
                                 ref.child(ep.getChecker()).child(ep.getCode()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-
+                                        Intent i = new Intent(ViewEventDetails.this, NavDrawer.class);
+                                        startActivity(i);
+                                        finish();
                                     }
                                 });
 
