@@ -121,6 +121,7 @@ public class FullscreenTicketCheck extends AppCompatActivity {
         code = tp.getCode();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mVisible = true;
+        temp = code+uid;
         mControlsView = findViewById(R.id.fullscreen_content_controls_ticket);
         mContentView = findViewById(R.id.fullscreen_content_ticket);
         final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
@@ -141,34 +142,10 @@ public class FullscreenTicketCheck extends AppCompatActivity {
         dummy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(FullscreenTicketCheck.this, R.style.AlertDialogCustom);
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
 
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("You are about to exit Check Event Mode. Proceed?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // edit text
-//                                        Intent i = new Intent(FullscreenTicketCheck.this, ViewTicketDetails.class);
-//                                        startActivity(i);
-                                        finish();
-                                    }
-                                })
-                        .setNegativeButton("No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
+                Intent i = new Intent(FullscreenTicketCheck.this, NavDrawer.class);
+                startActivity(i);
+                finish();
             }
         });
         // Set up the user interaction to manually show or hide the system UI.
@@ -235,10 +212,12 @@ public class FullscreenTicketCheck extends AppCompatActivity {
     }
 
     private void enableNdefExchangeMode() {
-        NdefRecord nfcr = NdefRecord.createTextRecord("en",code+uid);
+
+
+        NdefRecord nfcr = NdefRecord.createTextRecord("en",temp);
         //Send ndefmessage
         nfc.setNdefPushMessage(
-                new NdefMessage(nfcr),this );
+                new NdefMessage(nfcr),this);
 
         //Listen to the intentfilter created on the oncreate method
         nfc.enableForegroundDispatch(this, pi,
