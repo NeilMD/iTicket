@@ -130,7 +130,7 @@ public class ViewProfileAdapter extends RecyclerView.Adapter<ViewProfileAdapter.
     @Override
     //
     public int getItemCount() {
-        return data.size();
+        return e.size();
     }
 
     public class ViewProfileViewHolder extends RecyclerView.ViewHolder{
