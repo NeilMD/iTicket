@@ -31,22 +31,22 @@ public class MainProfile extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v =  inflater.inflate(R.layout.fragment_main_profile, container, false);
-//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Account a = dataSnapshot.getValue(Account.class);
-//                TextView email = (TextView) v.findViewById(R.id.pd_email_value);
-//                TextView name = (TextView) v.findViewById(R.id.pd_contactnum_value);
-//                email.setText(a.getEmail());
-//                name.setText(a.getName());
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Account a = dataSnapshot.getValue(Account.class);
+                TextView email = (TextView) v.findViewById(R.id.pd_email_value);
+                TextView name = (TextView) v.findViewById(R.id.pd_contactnum_value);
+                email.setText(a.getEmail());
+                name.setText(a.getName());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         return v;
 
     }

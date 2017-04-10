@@ -11,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 /**
@@ -59,8 +63,8 @@ public class EventsAttended extends Fragment {
         data.add("Mama");
 
         if(rvAttended != null) {
-            //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("events-attendees").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ep.getCode());
-            viewProfileAdapter = new ViewProfileAdapter(data);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-attended").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            viewProfileAdapter = new ViewProfileAdapter(data,ref);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvAttended.setLayoutManager(layoutManager);
             DividerItemDecorationCustom dividerItemDecoration = new DividerItemDecorationCustom(rvAttended.getContext());
@@ -105,8 +109,8 @@ public class EventsAttended extends Fragment {
         @Override
         public void run() {
 
-            //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("events-attendees").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ep.getCode());
-            viewProfileAdapter = new ViewProfileAdapter(data);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-attended").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            viewProfileAdapter = new ViewProfileAdapter(data,ref);
             rvAttended.setAdapter(viewProfileAdapter);
             swipeContainer.setRefreshing(false);
         }
