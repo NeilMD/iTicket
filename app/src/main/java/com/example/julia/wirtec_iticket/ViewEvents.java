@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -132,6 +133,7 @@ public class ViewEvents extends Fragment {
                     android.R.color.holo_red_light);
         }
 
+
         return view;
     }
 
@@ -161,6 +163,8 @@ public class ViewEvents extends Fragment {
 
             rvEvents.setAdapter(viewEventAdapter);
             swipeContainer.setRefreshing(false);
+
+
         }
     }, 1000);
     }

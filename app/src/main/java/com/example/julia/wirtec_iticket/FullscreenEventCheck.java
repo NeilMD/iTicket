@@ -310,7 +310,7 @@ public class FullscreenEventCheck extends AppCompatActivity {
                                                         ref.child(ev.getCode()).setValue(ev).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
-                                                                Toast.makeText(getBaseContext(),acc.getName()+ "has attended"+ ev.getEventname()+"!",Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(getBaseContext(),acc.getName()+ " has attended "+ ev.getEventname()+"!",Toast.LENGTH_LONG).show();
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
                                                             @Override
@@ -347,7 +347,7 @@ public class FullscreenEventCheck extends AppCompatActivity {
                                 ref.child("status").setValue("exit").addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Toast.makeText(getBaseContext(),"Success Entry!",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getBaseContext(),"Success Exit!",Toast.LENGTH_LONG).show();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -368,7 +368,7 @@ public class FullscreenEventCheck extends AppCompatActivity {
 
                         }
                     });
-                    Toast.makeText(getBaseContext(),"Code:"+code+"    Auth:"+auth,Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getBaseContext(),"Code:"+code+"    Auth:"+auth,Toast.LENGTH_LONG).show();
                 }
 
 

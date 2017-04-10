@@ -33,7 +33,7 @@ public class AlarmReceiverEvent extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.logo_no_background)
                 .setTicker("Event")
                 .setContentTitle("Event")
-                .setContentText("You have an event in 3 days.")
+                .setContentText("You have an event within 3 days.")
                 .setLargeIcon(icon)
                 .setContentIntent(pendingMA)
                 .setAutoCancel(true);

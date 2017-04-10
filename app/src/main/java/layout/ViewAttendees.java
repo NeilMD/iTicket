@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.julia.wirtec_iticket.DividerItemDecorationCustom;
 import com.example.julia.wirtec_iticket.EventParcelable;
@@ -51,6 +52,7 @@ public class ViewAttendees extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_view_attendees, container, false);
+
 
         rvAttendees = (RecyclerView) view.findViewById(R.id.rv_attendees);
 
@@ -123,6 +125,8 @@ public class ViewAttendees extends Fragment {
             viewAttendeesAdapter = new ViewAttendeesAdapter(data,ref);
             rvAttendees.setAdapter(viewAttendeesAdapter);
             swipeContainer.setRefreshing(false);
+
+
         }
     }, 1000);
     }

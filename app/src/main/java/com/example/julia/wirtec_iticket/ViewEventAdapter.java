@@ -130,7 +130,7 @@ public class ViewEventAdapter extends RecyclerView.Adapter<ViewEventAdapter.View
         });
 
         holder.datetime.setText(simpleDateFormat.format(n) + simpleDateFormat2.format(n2));
-        holder.attendees.setText(te.getChecker());
+        holder.attendees.setText(te.getCode());
     }
 
     @Override

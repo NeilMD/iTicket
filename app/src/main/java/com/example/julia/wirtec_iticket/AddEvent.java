@@ -259,7 +259,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                     ref.child(ee.getCode()).setValue(ee).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getBaseContext(),"Failed: "+ e,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(),"Failed",Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

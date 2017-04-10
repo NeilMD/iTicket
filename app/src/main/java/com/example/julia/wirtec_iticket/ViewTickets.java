@@ -46,7 +46,6 @@ public class ViewTickets extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_view_tickets, container, false);
-
         rvTickets = (RecyclerView) view.findViewById(R.id.rv_tickets);
 
         navDrawer = (NavDrawer) getActivity();
@@ -142,13 +141,14 @@ public class ViewTickets extends Fragment {
                     android.R.color.holo_red_light);
         }
 
-
         return view;
     }
 
     private void refreshContent(){ new Handler().postDelayed(new Runnable(){
         @Override
         public void run() {
+
+
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-tickets").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewTicketsAdapter = new ViewTicketsAdapter(data,ref);
 
@@ -177,6 +177,8 @@ public class ViewTickets extends Fragment {
 
             rvTickets.setAdapter(viewTicketsAdapter);
             swipeContainer.setRefreshing(false);
+
+
         }
     }, 1000);
     }

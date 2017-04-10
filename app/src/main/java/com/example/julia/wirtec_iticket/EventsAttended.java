@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -102,6 +103,7 @@ public class EventsAttended extends Fragment {
                     android.R.color.holo_red_light);
         }
 
+
         return view;
     }
 
@@ -109,10 +111,14 @@ public class EventsAttended extends Fragment {
         @Override
         public void run() {
 
+
             DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user-attended").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             viewProfileAdapter = new ViewProfileAdapter(data,ref);
             rvAttended.setAdapter(viewProfileAdapter);
             swipeContainer.setRefreshing(false);
+
+
+
         }
     }, 1000);
     }

@@ -165,11 +165,11 @@ public class NavDrawer extends AppCompatActivity {
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 acc = dataSnapshot.getValue(Account.class);
                                                 ref2 = FirebaseDatabase.getInstance().getReference().child("event");
-                                                Toast.makeText(getBaseContext(),"Success1!"+userInput.getText(),Toast.LENGTH_LONG).show();
+//                                                Toast.makeText(getBaseContext(),"Success1!"+userInput.getText(),Toast.LENGTH_LONG).show();
                                                 ref2.addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        Toast.makeText(getBaseContext(),"Success!lknlk"+userInput.getText(),Toast.LENGTH_LONG).show();
+//                                                        Toast.makeText(getBaseContext(),"Success!lknlk"+userInput.getText(),Toast.LENGTH_LONG).show();
                                                         if(dataSnapshot.hasChild(userInput.getText().toString())){
                                                             Event c = dataSnapshot.child(userInput.getText().toString()).getValue(Event.class);
 
