@@ -72,7 +72,7 @@ public class ViewAttendees extends Fragment {
         data.add("Mama");
 
         if(rvAttendees != null) {
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-attendees").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(ep.getCode());
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("event-attendees").child(ep.getCode());
             viewAttendeesAdapter = new ViewAttendeesAdapter(data,ref);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
             rvAttendees.setLayoutManager(layoutManager);
