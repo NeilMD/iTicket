@@ -1,10 +1,14 @@
 package com.example.julia.wirtec_iticket;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -38,7 +42,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class NavDrawer extends AppCompatActivity {
 
@@ -60,6 +65,10 @@ public class NavDrawer extends AppCompatActivity {
     private DatabaseReference ref2;
     private Account acc;
     private Ticket t;
+
+    public final static int NOTIFICATION_ID_MATCH = 0;
+    public final static int PENDING_MA = 0;
+    public final static int PENDING_ALARM = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +185,41 @@ public class NavDrawer extends AppCompatActivity {
                                                                         @Override
                                                                         public void onSuccess(Void aVoid) {
                                                                             Toast.makeText(getBaseContext(),"Success!",Toast.LENGTH_LONG).show();
+
+                                                                            Intent intentAlarm = new Intent();
+                                                                            intentAlarm.setClass(getBaseContext(), AlarmReceiverTicket.class);
+
+                                                                            PendingIntent pendingAlarm = PendingIntent.getBroadcast(
+                                                                                    getBaseContext(),
+                                                                                    PENDING_ALARM,
+                                                                                    intentAlarm,
+                                                                                    PendingIntent.FLAG_UPDATE_CURRENT
+                                                                            );
+
+                                                                            Calendar now = Calendar.getInstance();
+                                                                            now.add(Calendar.SECOND, 30);
+                                                                            Date dateNow = new Date();
+                                                                            now.setTime(dateNow);
+                                                                            long millinow =  now.getTimeInMillis();
+                                                                            int days = (int) ((t.getDate() - millinow) / (1000*60*60*24)) + 1;
+                                                                            intentAlarm.putExtra("days", days);
+
+                                                                            /*Toast.makeText(getBaseContext(), "Days: " + days, Toast.LENGTH_LONG).show();*/
+
+                                                                            Calendar setDate = Calendar.getInstance();
+                                                                            setDate.setTimeInMillis(t.getDate());
+                                                                            setDate.add(Calendar.DATE, -1);
+                                                                            setDate.add(Calendar.SECOND, 60);
+
+                                                                            long interval = setDate.getTimeInMillis() - millinow;
+
+                                                                            // set alarm to prompt alarm receiver after x sec
+                                                                            AlarmManager alarmManager = (AlarmManager) getSystemService(Service.ALARM_SERVICE);
+                                                                            alarmManager.set(
+                                                                                    AlarmManager.ELAPSED_REALTIME,
+                                                                                    SystemClock.elapsedRealtime() + (interval /** 1000*/),
+                                                                                    pendingAlarm
+                                                                            );
                                                                         }
                                                                     }).addOnFailureListener(new OnFailureListener() {
                                                                         @Override

@@ -1,26 +1,23 @@
 package com.example.julia.wirtec_iticket;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -61,7 +58,9 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
     String key;
     private long dateInMil;
 
-
+    public final static int NOTIFICATION_ID_MATCH = 0;
+    public final static int PENDING_MA = 0;
+    public final static int PENDING_ALARM = 1;
 
     EditText datetime, event, place, about, ticketlimit, price;
     CheckBox yes, no;
@@ -272,6 +271,41 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
+
+                                    Intent intentAlarm = new Intent();
+                                    intentAlarm.setClass(getBaseContext(), AlarmReceiverEvent.class);
+
+                                    PendingIntent pendingAlarm = PendingIntent.getBroadcast(
+                                            getBaseContext(),
+                                            PENDING_ALARM,
+                                            intentAlarm,
+                                            PendingIntent.FLAG_UPDATE_CURRENT
+                                    );
+
+                                    Calendar now = Calendar.getInstance();
+                                    now.add(Calendar.SECOND, 30);
+                                    Date dateNow = new Date();
+                                    now.setTime(dateNow);
+                                    long millinow =  now.getTimeInMillis();
+                                    int days = (int) ((dateInMil - millinow) / (1000*60*60*24)) + 1;
+
+                                    /*Toast.makeText(getBaseContext(), "Days: " + days, Toast.LENGTH_LONG).show();*/
+
+                                        Calendar setDate = Calendar.getInstance();
+                                        setDate.setTimeInMillis(dateInMil);
+                                        setDate.add(Calendar.DATE, -3);
+                                        setDate.add(Calendar.SECOND, 60);
+
+                                        long interval = setDate.getTimeInMillis() - millinow;
+
+                                        // set alarm to prompt alarm receiver after x sec
+                                        AlarmManager alarmManager = (AlarmManager) getSystemService(Service.ALARM_SERVICE);
+                                        alarmManager.set(
+                                                AlarmManager.ELAPSED_REALTIME,
+                                                SystemClock.elapsedRealtime() + (interval /** 1000*/),
+                                                pendingAlarm
+                                        );
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override

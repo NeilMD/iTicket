@@ -118,7 +118,7 @@ public class ViewAttendeesAdapter extends RecyclerView.Adapter<ViewAttendeesAdap
         dev.dworks.libs.astickyheader.ui.SquareImageView image;
         TextView name;
         TextView email;
-        TextView numTickets;
+        /*TextView numTickets;*/
 
 
         public ViewAttendeesViewHolder (View itemView){
@@ -126,7 +126,7 @@ public class ViewAttendeesAdapter extends RecyclerView.Adapter<ViewAttendeesAdap
             image = (dev.dworks.libs.astickyheader.ui.SquareImageView) itemView.findViewById(R.id.attendeesimage);
             name = (TextView) itemView.findViewById(R.id.attendeesname);
             email = (TextView) itemView.findViewById(R.id.attendeesemail);
-            numTickets = (TextView) itemView.findViewById(R.id.attnumtickets);
+            /*numTickets = (TextView) itemView.findViewById(R.id.attnumtickets);*/
 
         }
 
