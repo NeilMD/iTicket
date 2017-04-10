@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.julia.wirtec_iticket">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <!--<uses-permission android:name="android.permission.READ_CONTACTS" />-->
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="iTicket"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".LoginActivity"
+            android:label="iTicket"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SignupActivity"
+            android:label="SignupActivity"
+            android:theme="@style/AppTheme"
+            android:noHistory="true"/>
+        <activity
+            android:name=".NavDrawer"
+            android:label="@string/title_activity_nav_drawer"
+            android:noHistory="true"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".FullscreenTicketCheck"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_ticket_check"
+            android:theme="@style/FullscreenTheme" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/com.example.android.beam" />
+            </intent-filter>
+         </activity>
+        <activity
+            android:name=".FullscreenEventCheck"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen_event_check"
+            android:theme="@style/FullscreenTheme" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/com.example.android.beam" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ViewEventDetails"
+            android:label="@string/title_activity_view_event_details"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ViewTicketDetails"
+            android:label="@string/title_activity_view_ticket_details"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Profile"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".EditEventDetails"
+            android:label="@string/title_activity_edit_event_details"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".EditProfile"
+            android:label="@string/title_activity_edit_profile"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AddEvent"
+            android:label="@string/title_activity_add_event"
+            android:theme="@style/AppTheme" />
+    </application>
+
+</manifest>

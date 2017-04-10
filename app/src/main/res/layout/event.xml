@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:longClickable="true"
+    android:clickable="true"
+    android:backgroundTint="#ffffff"
+    android:backgroundTintMode="add"
+    android:background="?android:attr/selectableItemBackground"
+    android:id="@+id/ticket">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view3"
+        android:orientation="horizontal"
+        android:background="#95e695"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        card_view:cardElevation="5dp"
+        android:padding ="15dp">
+
+        <dev.dworks.libs.astickyheader.ui.SquareImageView
+            android:layout_width="65dp"
+            android:layout_height="6dp"
+            android:id="@+id/eventimage"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:src="@drawable/ticketsbg"/>
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/textcontainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="75dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="center_vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/eventlay"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:id="@+id/eventicon"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/ic_event"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:paddingTop="4dp"
+                    android:textSize="12sp"
+                    android:id="@+id/eventname"
+                    android:layout_toRightOf="@+id/eventicon"
+                    android:layout_alignBottom="@+id/eventicon"
+
+                    android:textColor="@color/primary_text"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/codelay"
+                android:gravity="center_horizontal"
+                android:layout_below="@+id/eventlay">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:id="@+id/codeicon"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/ic_confirmation_number_black_24dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:paddingTop="3dp"
+                    android:textColor="@color/primary_text"
+                    android:layout_toRightOf="@+id/codeicon"
+                    android:layout_alignBottom="@+id/codeicon"
+                    android:textSize="12sp"
+                    android:id="@+id/attendees"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/placelay"
+                android:gravity="center_horizontal"
+                android:layout_below="@+id/codelay">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:id="@+id/placeicon"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/ic_place_black_24dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:paddingTop="4dp"
+                    android:textSize="12sp"
+                    android:layout_toRightOf="@+id/placeicon"
+                    android:textColor="@color/primary_text"
+                    android:layout_alignBottom="@+id/placeicon"
+                    android:id="@+id/eventplace"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/datetimelay"
+                android:gravity="center_horizontal"
+                android:layout_below="@+id/placelay">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
+                    android:id="@+id/datetimeicon"
+                    android:tint="@color/colorPrimary"
+                    android:src="@drawable/overtime"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:paddingTop="3dp"
+                    android:textSize="12sp"
+                    android:layout_toRightOf="@+id/datetimeicon"
+                    android:textColor="@color/primary_text"
+                    android:layout_alignBottom="@+id/datetimeicon"
+                    android:id="@+id/eventdatetime"/>
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
