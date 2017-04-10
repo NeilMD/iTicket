@@ -257,7 +257,7 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                     String ccc =  new CodeGenerator().getSaltString();
                      ee = new Event(ccc,ename,eabout, dateInMil ,dateEvent.getTime(),Long.parseLong(1+""),true,eplace,auth.getCurrentUser().getUid());
                      key = ref.push().getKey();
-                    ref.child(key).setValue(ee).addOnFailureListener(new OnFailureListener() {
+                    ref.child(ee.getCode()).setValue(ee).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             Toast.makeText(getBaseContext(),"Failed: "+ e,Toast.LENGTH_SHORT).show();
