@@ -291,6 +291,8 @@ public class AddEvent extends AppCompatActivity implements View.OnClickListener 
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(getBaseContext(),"Success",Toast.LENGTH_SHORT).show();
+
+
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
