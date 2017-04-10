@@ -84,6 +84,12 @@
             android:name=".AddEvent"
             android:label="@string/title_activity_add_event"
             android:theme="@style/AppTheme" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
     </application>
 
 </manifest>
